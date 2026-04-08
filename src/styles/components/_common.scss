@@ -1,0 +1,25 @@
+@use "../base/" as *;
+
+.confirm-modal {
+    &-header {
+        @include flex(row, flex-start, center);
+
+        &-content {
+            margin-left: $spacing-md;
+
+            .confirm-modal-message {
+                color: var(--color-text-muted);
+                font-size: $font-size-sm;
+            }
+        }
+    }
+
+    &-actions {
+        @include flex(row, flex-end, center);
+        margin-top: $spacing-md;
+
+        .btn-outline {
+            margin-right: $spacing-md;
+        }
+    }
+}

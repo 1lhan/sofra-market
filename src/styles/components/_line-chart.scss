@@ -1,0 +1,138 @@
+@use "../base/" as *;
+
+.line-chart {
+    @include flex(column, flex-start, stretch);
+    width: 100%;
+    height: 100%;
+    padding: $spacing-lg;
+    gap: $spacing-md;
+    background-color: var(--color-surface);
+    border-radius: $radius-lg;
+    font-size: $font-size-sm;
+
+    &-header {
+        @include flex(row, flex-end, center);
+        flex-wrap: wrap;
+        gap: $spacing-sm $spacing-md;
+
+        .line-chart-title {
+            margin-right: auto;
+            font-size: $font-size-base;
+            font-weight: 500;
+        }
+
+        .line-chart-legend {
+            @include flex(row, center, center);
+            gap: $spacing-md;
+
+            &-item {
+                @include flex(row, center, center);
+                gap: $spacing-sm;
+
+                &-color {
+                    width: 0.5rem;
+                    height: 0.5rem;
+                    border-radius: 50%;
+                }
+            }
+        }
+    }
+
+    &-body {
+        @include flex(row, flex-start, stretch);
+        flex: 1;
+        gap: $spacing-sm;
+
+        .line-chart-axis-ticks {
+            height: calc(100% - 26px);
+            margin-top: 1px;
+
+            .line-chart-axis-tick {
+                height: 25%;
+
+                &-value {
+                    text-align: right;
+                    transform: translateY(-50%);
+                }
+            }
+        }
+
+        .line-chart-chart {
+            @include flex(column, space-between, stretch);
+            width: calc(100% - 4.75rem);
+            margin: 0 auto;
+            gap: $spacing-sm;
+
+            .line-chart-svg-container {
+                position: relative;
+                flex: 1;
+
+                .line-chart-svg {
+                    width: 100%;
+                    height: 100%;
+                    overflow: visible;
+
+                    .line-chart-grid-line {
+                        stroke-width: 1px;
+                        stroke: var(--color-overlay);
+                    }
+
+                    .line-chart-hover-line {
+                        stroke: var(--color-border);
+                        stroke-dasharray: 4;
+                    }
+
+                    .line-chart-circle {
+                        r: 4px;
+                        fill: currentColor;
+                    }
+
+                    .line-chart-path {
+                        stroke-width: 2;
+                        fill: none;
+                    }
+                }
+
+                .line-chart-tooltip {
+                    position: absolute;
+                    top: calc(100% + 0.25rem);
+                    padding: 0.625rem;
+                    background-color: var(--color-surface);
+                    border: 1px solid var(--color-border);
+                    border-radius: $radius-sm;
+                    transform: translateX(-50%);
+                    white-space: nowrap;
+                    z-index: 2;
+
+                    &-content {
+                        @include flex(column, flex-start, stretch);
+                        gap: 0.25rem;
+
+                        &-item {
+                            @include flex(row, space-between, center);
+                            gap: $spacing-md;
+
+                            span:nth-of-type(1) {
+                                color: var(--color-text-muted);
+                            }
+
+                            span:nth-of-type(2) {
+                                font-weight: 500;
+                            }
+                        }
+                    }
+                }
+            }
+
+            .line-chart-axis-labels {
+                position: relative;
+                min-height: 1rem;
+
+                .line-chart-axis-label {
+                    position: absolute;
+                    transform: translateX(-50%);
+                }
+            }
+        }
+    }
+}

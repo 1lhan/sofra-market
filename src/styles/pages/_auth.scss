@@ -1,0 +1,13 @@
+@use "../base" as *;
+
+.sign-up-page,
+.sign-in-page {
+    .form {
+        max-width: 25rem;
+        margin: 8rem auto 0 auto;
+
+        .form-submit-button {
+            width: 100%;
+        }
+    }
+}

@@ -1,0 +1,107 @@
+@use "../base" as *;
+
+.admin-layout {
+    @include flex(row, flex-start, stretch);
+    width: 100dvw;
+    height: 100dvh;
+
+    .admin-sidebar {
+        position: sticky;
+        top: 0;
+        width: 17.5rem;
+        padding: $spacing-md;
+        background-color: var(--color-bg-dark);
+        overflow: hidden;
+        transition: all 0.4s;
+
+        &.sidebar-hidden {
+            width: 0;
+            padding-right: 0;
+            padding-left: 0;
+        }
+
+        .sidebar-menu {
+            color: var(--color-text-inverse);
+
+            .sidebar-menu-link {
+                color: var(--color-text-inverse);
+
+                &:hover {
+                    color: var(--color-primary);
+                }
+
+                &.active {
+                    background-color: var(--color-surface-on-bg-dark);
+                    color: var(--color-primary);
+                }
+            }
+        }
+
+        &-logo-wrapper {
+            @include flex(row, center, center);
+            height: 5rem;
+            margin-bottom: $spacing-xl;
+            background-color: var(--color-surface-on-bg-dark);
+            border-radius: $radius-lg;
+        }
+    }
+
+    &-main {
+        position: relative;
+        flex: 1;
+        overflow-y: scroll;
+
+        .admin-header {
+            position: sticky;
+            top: 0;
+            @include flex(row, space-between, center);
+            height: 4.5rem;
+            padding: $spacing-md;
+            background-color: var(--color-bg);
+            box-shadow: 0px 16px 16px -16px hsl(0, 0%, 75%);
+            z-index: 10;
+
+            .sidebar-toggle {
+                transition: transform 0.4s;
+
+                &.active {
+                    color: var(--color-primary);
+                    transform: rotate(180deg);
+                }
+            }
+        }
+
+        .admin-layout-content {
+            min-height: calc(100vh - 4.5rem);
+            padding: $spacing-lg;
+            background-color: hsl(220, 14%, 94%);
+
+            .admin-page {
+                padding: $spacing-lg;
+                background-color: var(--color-bg);
+                border-radius: $radius-sm;
+
+                &-header {
+                    @include flex(row, flex-start, center);
+                    margin-bottom: $spacing-md;
+                    gap: $spacing-sm;
+
+                    .btn-primary {
+                        margin-left: auto;
+                    }
+                }
+
+                .admin-list {
+                    @include flex(row, flex-start, flex-start);
+                    gap: $spacing-md;
+
+                    .table-container {
+                        @include flex(column, flex-start, stretch);
+                        width: 100%;
+                        gap: $spacing-md;
+                    }
+                }
+            }
+        }
+    }
+}

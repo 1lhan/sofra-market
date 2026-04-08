@@ -1,0 +1,175 @@
+@use "../base/" as *;
+
+.column-chart {
+    @include flex(column, flex-start, stretch);
+    width: 100%;
+    height: 100%;
+    padding: $spacing-lg;
+    gap: $spacing-md;
+    background-color: var(--color-surface);
+    border-radius: $radius-md;
+    font-size: $font-size-sm;
+
+    &.column-chart-column {
+        .column-chart-axis-ticks {
+            @include flex(column, flex-start, stretch);
+            height: calc(100% - 1.5rem);
+
+            .column-chart-axis-tick {
+                &-value {
+                    transform: translateY(-50%);
+                }
+            }
+        }
+
+        .column-chart-axis-labels {
+            @include flex(row, space-between, center);
+            min-height: 1rem;
+            max-height: 1rem;
+        }
+
+        .column-chart-bar-groups {
+            @include flex(row, flex-start, stretch);
+
+            .column-chart-grid {
+                @include flex(column, space-between, stretch);
+
+                &-item {
+                    border-top: 1px dashed var(--color-overlay);
+                }
+            }
+
+            .column-chart-bar-group {
+                @include flex(row, space-between, flex-end);
+            }
+        }
+    }
+
+    &.column-chart-row {
+        .column-chart-axis-labels {
+            @include flex(column, flex-start, stretch);
+            height: calc(100% - 1.5rem);
+        }
+
+        .column-chart-axis-ticks {
+            @include flex(row, flex-start, center);
+            min-height: 1rem;
+            max-height: 1rem;
+
+            .column-chart-axis-tick {
+                &-value {
+                    width: fit-content;
+                    transform: translateX(-50%);
+                }
+            }
+        }
+
+        .column-chart-bar-groups {
+            @include flex(column, flex-start, stretch);
+
+            .column-chart-grid {
+                @include flex(row, space-between, stretch);
+
+                &-item {
+                    border-right: 1px dashed var(--color-overlay);
+                }
+            }
+
+            .column-chart-bar-group {
+                @include flex(column, flex-start, flex-start);
+            }
+        }
+    }
+
+    &.column-chart-multi-ticks {
+        &.column-chart-column {
+            .column-chart-axis-ticks {
+                height: 100%;
+            }
+        }
+
+        &.column-chart-row {
+            .column-chart-axis-labels {
+                height: 100%;
+            }
+        }
+    }
+
+    &-header {
+        @include flex(row, space-between, center);
+
+        .column-chart-title {
+            font-size: $font-size-base;
+            font-weight: 500;
+        }
+
+        .column-chart-legend {
+            @include flex(row, center, center);
+            gap: $spacing-sm;
+
+            &-item {
+                @include flex(row, center, center);
+                gap: 0.25rem;
+
+                &-color {
+                    width: 0.5rem;
+                    height: 0.5rem;
+                    border-radius: 50%;
+                }
+            }
+        }
+    }
+
+    &-body {
+        @include flex(row, flex-start, stretch);
+        height: 100%;
+        gap: $spacing-sm;
+
+        .column-chart-axis-labels {
+            gap: 0.75rem;
+
+            .column-chart-axis-label {
+                @include flex(row, center, center);
+                flex: 1;
+                white-space: nowrap;
+            }
+        }
+
+        .column-chart-axis-ticks {
+            .column-chart-axis-tick {
+                flex: 0 0 25%;
+            }
+        }
+
+        .column-chart-chart {
+            @include flex(column, flex-start, stretch);
+            width: 100%;
+            gap: $spacing-sm;
+
+            .column-chart-bar-groups {
+                position: relative;
+                height: 100%;
+                gap: 0.75rem;
+
+                .column-chart-grid {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                }
+
+                .column-chart-bar-group {
+                    flex: 1;
+                    gap: 0.75rem;
+                    z-index: 1;
+
+                    .column-chart-bar {
+                        flex: 1;
+                        border-radius: $radius-sm;
+                    }
+                }
+            }
+        }
+    }
+}

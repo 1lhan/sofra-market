@@ -1,0 +1,27 @@
+@use "../base/" as *;
+
+.pagination {
+    @include flex(row, flex-end, center);
+    margin-top: $spacing-sm;
+    gap: 2px;
+
+    .btn-surface {
+        width: 2rem;
+        height: 2rem;
+
+        &.pagination-button-active {
+            background-color: var(--color-primary-light);
+            color: var(--color-primary);
+        }
+    }
+
+    &-button {
+        &-previous {
+            border-radius: $radius-md 0 0 $radius-md;
+        }
+
+        &-next {
+            border-radius: 0 $radius-md $radius-md 0;
+        }
+    }
+}

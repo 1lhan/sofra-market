@@ -1,0 +1,104 @@
+@use "../base/" as *;
+
+.table {
+    width: 100%;
+    margin: -3px 0;
+    border-spacing: 0 3px;
+    font-size: $font-size-sm;
+
+    &-row {
+        .table-cell {
+            border-bottom: 1px solid var(--color-surface-hover);
+
+            &-group-content {
+                @include flex(row, flex-start, center);
+                gap: $spacing-md;
+            }
+
+            &-item {
+                @include flex(row, flex-start, center);
+                gap: $spacing-sm;
+
+                .table-sort-icons {
+                    @include flex(column, flex-start, center);
+
+                    .icon-caret-up,
+                    .icon-caret-down {
+                        width: 0.4375rem;
+                        aspect-ratio: 1;
+                    }
+                }
+            }
+
+            &.table-cell-checkbox {
+                width: 3rem;
+            }
+
+            &.table-cell-görsel {
+                width: 5rem;
+            }
+
+            &.table-cell-action {
+                width: 7.5rem;
+
+                .table-cell-group-content {
+                    justify-content: center;
+                }
+            }
+        }
+    }
+
+    &-head {
+        color: var(--color-text-muted);
+
+        .table-row {
+            .table-cell {
+                padding: $spacing-sm $spacing-md;
+                vertical-align: bottom;
+
+                //+
+                span {
+                    white-space: nowrap;
+                }
+
+                &-group-content {
+                    margin-top: 0.25rem;
+                }
+
+                &-item {
+                    &.sortable {
+                        cursor: pointer;
+                    }
+                }
+
+                &.table-cell-action {
+                    span {
+                        visibility: hidden;
+                    }
+                }
+            }
+        }
+    }
+
+    &-body {
+        &::before {
+            content: "";
+        }
+
+        .table-row {
+            &:nth-last-of-type(1) {
+                .table-cell {
+                    border-bottom: 0;
+                }
+            }
+        }
+
+        .table-cell {
+            padding: $spacing-md;
+        }
+
+        .table-cell-görsel {
+            padding: $spacing-sm $spacing-md;
+        }
+    }
+}

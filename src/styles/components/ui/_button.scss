@@ -1,0 +1,206 @@
+@use "sass:color";
+@use "sass:map";
+@use "../../base/" as *;
+
+$btn-colors: (
+    primary: (color: var(--color-text-inverse),
+        bg: var(--color-primary),
+        hover: var(--color-primary-hover)),
+    secondary: (color: var(--color-text-inverse),
+        bg: var(--color-secondary),
+        hover: var(--color-secondary-hover)),
+    neutral: (color: var(--color-text-primary),
+        hover: var(--color-primary)),
+    muted: (color: var(--color-text-muted),
+        hover: var(--color-text-primary)),
+    inverse: (color: var(--color-text-inverse),
+        hover: var(--color-primary)),
+    inverse-muted: (color: var(--color-text-inverse-muted),
+        hover: var(--color-text-inverse)),
+    surface: (color: var(--color-text-primary),
+        bg: var(--color-surface),
+        hover: var(--color-surface-hover)),
+    dark-surface: (color: var(--color-text-inverse),
+        bg: var(--color-surface-on-bg-dark),
+        hover: var(--color-surface-on-bg-dark-hover)),
+    info:(color: var(--color-text-inverse),
+        bg: var(--color-info),
+        hover: var(--color-info-hover)),
+    info-light:(color: var(--color-info),
+        bg: var(--color-info-light),
+        hover: var(--color-info-light-hover)),
+    success:(color: var(--color-text-inverse),
+        bg: var(--color-success),
+        hover: var(--color-success-hover)),
+    success-light:(color: var(--color-success),
+        bg: var(--color-success-light),
+        hover: var(--color-success-light-hover)),
+    danger:(color: var(--color-text-inverse),
+        bg: var(--color-danger),
+        hover: var(--color-danger-hover)),
+    danger-light:(color: var(--color-danger),
+        bg: var(--color-danger-light),
+        hover: var(--color-danger-light-hover)),
+    warning:(color: var(--color-text-inverse),
+        bg: var(--color-warning),
+        hover: var(--color-warning-hover)),
+    warning-light:(color: var(--color-warning),
+        bg: var(--color-warning-light),
+        hover: var(--color-warning-light-hover)),
+);
+
+@mixin generate-btn-styles($btn-color-name) {
+    $props: map.get($btn-colors, $btn-color-name);
+    $color: map.get($props, color);
+    $bg: map.get($props, bg);
+    $hover: map.get($props, hover);
+
+    $is-text-color: $btn-color-name =="neutral" or $btn-color-name=="muted" or $btn-color-name=="inverse" or $btn-color-name =="inverse-muted";
+    $is-muted-color: $btn-color-name=="muted" or $btn-color-name =="inverse-muted";
+    $is-layer-color: $btn-color-name =="surface" or $btn-color-name =="dark-surface";
+    $is-light-color: $btn-color-name =="info-light" or $btn-color-name =="success-light" or $btn-color-name =="danger-light" or $btn-color-name =="warning-light";
+
+    .btn-#{$btn-color-name} {
+        &.btn-filled {
+            color: $color;
+            background-color: $bg;
+
+            &:hover {
+                @if $is-muted-color {
+                    color: $hover;
+                }
+
+                background: if($btn-color-name =="neutral" or $btn-color-name=="muted", var(--color-surface),
+                    if($btn-color-name=="inverse" or $btn-color-name =="inverse-muted", var(--color-surface-on-bg-dark), $hover));
+            }
+        }
+
+        @if $is-layer-color==false and $is-light-color==false {
+            &.btn-outline {
+                color: if($is-text-color, $color, $bg);
+                border-color: if($is-text-color, $color, $bg);
+
+                &:hover {
+                    @if $is-muted-color {
+                        color: $hover;
+                    }
+
+                    background-color: hsla(from if($is-text-color, $color, $bg) h s l / 0.2);
+                }
+            }
+
+            &.btn-ghost,
+            &.btn-underline {
+                color: if($is-text-color, $color, $bg);
+
+                &:hover {
+                    color: $hover;
+                }
+            }
+        }
+    }
+}
+
+@each $name, $props in $btn-colors {
+    @include generate-btn-styles($name);
+}
+
+.btn {
+    @include flex(row, center, center);
+    width: fit-content;
+    transition: color 0.2s, background-color 0.2s, border-color 0.2s;
+
+    &:disabled:not(.loading) {
+        opacity: 0.6;
+        filter: grayscale(10%);
+        pointer-events: none;
+        cursor: not-allowed;
+    }
+
+    &.loading {
+        background-color: hsl(0, 0%, 85%);
+        color: hsl(0, 0%, 85%);
+        user-select: none;
+        pointer-events: none;
+        cursor: not-allowed;
+    }
+
+    .loader-spinner {
+        position: absolute;
+    }
+
+    &-outline {
+        border: 1px solid transparent;
+    }
+
+    &-underline {
+        text-decoration: underline;
+        text-underline-offset: 1px;
+    }
+
+    &-sm {
+        gap: 0.25rem;
+        font-size: $font-size-xs;
+
+        .loader-spinner {
+            height: 1rem;
+        }
+    }
+
+    &-md {
+        gap: $spacing-sm;
+        font-size: $font-size-sm;
+
+        .loader-spinner {
+            height: 1.25rem;
+        }
+    }
+
+    &-lg {
+        gap: $spacing-sm;
+        font-size: $font-size-base;
+
+        .loader-spinner {
+            height: 1.5rem;
+        }
+    }
+
+    &-default {
+        border-radius: $radius-md;
+
+        &.btn-sm {
+            padding: 0.5rem 1rem;
+        }
+
+        &.btn-md {
+            padding: 0.625rem 1.25rem;
+        }
+
+        &.btn-lg {
+            padding: 0.875rem 1.5rem;
+        }
+    }
+
+    &-circle,
+    &-compact {
+        &.btn-sm {
+            padding: 0.5rem;
+        }
+
+        &.btn-md {
+            padding: 0.625rem;
+        }
+
+        &.btn-lg {
+            padding: 0.875rem;
+        }
+    }
+
+    &-circle {
+        border-radius: 50%;
+    }
+
+    &-compact {
+        border-radius: $radius-md;
+    }
+}

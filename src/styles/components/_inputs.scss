@@ -1,0 +1,268 @@
+@use "../base/" as *;
+
+$input-height: 2.75rem;
+$input-padding-x: 0.75rem;
+$input-padding-y: 0.4375rem;
+$input-gap: 0.5rem;
+$input-bg: var(--color-surface);
+$input-border: 1px solid transparent;
+$input-border-radius: $radius-md;
+
+.input {
+    background-color: $input-bg;
+    color: var(--color-text-primary);
+    border: $input-border;
+    outline: 0;
+    border-radius: $input-border-radius;
+    transition: background-color 0.3s, border-color 0.3s;
+
+    &-field {
+        height: $input-height;
+        padding: $input-padding-y $input-padding-x;
+
+        &:hover {
+            background-color: var(--color-surface-hover);
+        }
+
+        &:focus {
+            border-color: var(--color-primary);
+        }
+    }
+
+    &-textarea {
+        min-height: calc($input-height * 2);
+        padding: $input-padding-y $input-padding-x;
+        resize: none;
+
+        &:hover {
+            background-color: var(--color-surface-hover);
+        }
+
+        &:focus {
+            border-color: var(--color-primary);
+        }
+    }
+
+    &-checkbox {
+        width: 1rem;
+        height: 1rem;
+        border-color: var(--color-border);
+        border-radius: $radius-sm;
+        appearance: none;
+
+        &:hover {
+            background-color: var(--color-surface-hover);
+        }
+
+        &:checked {
+            background: var(--color-primary) url("data:image/gif;base64,R0lGODlhCwAKAIABAP////3cnSH5BAEKAAEALAAAAAALAAoAAAIUjH+AC73WHIsw0UCjglraO20PNhYAOw==") no-repeat 3px 3px / 62.5% 62.5%;
+            border-color: var(--color-primary);
+        }
+    }
+
+    &-radio {
+        width: 1rem;
+        height: 1rem;
+        border-color: var(--color-border);
+        border-radius: 50%;
+        appearance: none;
+
+        &:checked {
+            background-color: var(--color-primary);
+            border-color: var(--color-primary);
+            box-shadow: inset 0 0 0 2px var(--color-surface);
+        }
+    }
+
+    &.input-error {
+        border-color: var(--color-danger);
+    }
+}
+
+.checkbox-wrapper,
+.radio-wrapper {
+    @include flex(row, center, center);
+    gap: 0.25rem;
+}
+
+.custom-select {
+    font-size: $font-size-sm;
+
+    &-trigger {
+        @include flex(row, space-between, center);
+        width: 100%;
+        height: $input-height;
+        padding: $input-padding-y $input-padding-x;
+        background-color: $input-bg;
+        border: $input-border;
+        border-radius: $input-border-radius;
+        transition: background-color 0.3s, border-color 0.3s;
+        z-index: 1;
+
+        &:hover {
+            background-color: var(--color-surface-hover);
+        }
+
+        &.custom-select-trigger-open {
+            border-color: var(--color-primary);
+
+            .icon-chevron-down {
+                color: var(--color-primary);
+                transform: rotate(180deg);
+            }
+
+            ~.custom-select-dropdown {
+                display: block;
+            }
+        }
+
+        &.input-error {
+            border-color: var(--color-danger);
+        }
+
+        .custom-select-display {
+            @include text-line-clamp(1);
+            text-align: start;
+            backface-visibility: hidden;
+        }
+
+        .icon-chevron-down {
+            transition: transform 0.3s, color 0.3s;
+        }
+    }
+
+    &-dropdown {
+        position: fixed;
+        position-area: bottom center;
+        position-try-fallbacks: flip-block;
+        display: none;
+        min-width: 100%;
+        padding: $spacing-sm 0;
+        margin-top: 2px;
+        background-color: $input-bg;
+        border: 1px solid var(--color-border);
+        border-radius: $input-border-radius;
+        z-index: 2;
+
+        .custom-select-search-wrapper {
+            position: relative;
+            margin: 0 $input-padding-x $input-gap $input-padding-x;
+
+            .input-field {
+                width: 100%;
+            }
+
+            .icon-magnifying-glass {
+                position: absolute;
+                top: 50%;
+                right: 0;
+                transform: translate(0, -50%);
+            }
+        }
+
+        .custom-select-options {
+            max-height: 11rem;
+            overflow: auto;
+
+            .custom-select-option {
+
+                &-label {
+                    @include flex(row, flex-start, center);
+                    cursor: pointer;
+
+                    .checkbox-wrapper {
+                        margin-right: $spacing-sm;
+                    }
+                }
+
+                &-button,
+                &-label {
+                    width: 100%;
+                    padding: 0.625rem 1rem;
+                    text-align: start;
+
+                    &:hover {
+                        background-color: var(--color-surface-hover);
+                    }
+                }
+            }
+        }
+    }
+}
+
+.file-upload {
+    font-size: $font-size-sm;
+
+    &-input {
+        display: none;
+    }
+
+    &-dropzone {
+        @include flex(column, center, center);
+        width: 100%;
+        aspect-ratio: 3/1;
+        padding: $input-padding-y $input-padding-x;
+        gap: 0.25rem;
+        background-color: $input-bg;
+        border: 1px dashed var(--color-border);
+        border-radius: $input-border-radius;
+        cursor: pointer;
+        transition: background-color 0.3s;
+
+        &:hover {
+            background-color: var(--color-surface-hover);
+        }
+
+        &.input-error {
+            border-color: var(--color-danger);
+        }
+
+        .icon-file-arrow-up {
+            color: var(--color-primary);
+        }
+
+        .file-upload-prompt {
+            text-align: center;
+        }
+
+        .file-upload-info {
+            color: var(--color-text-muted);
+            font-size: $font-size-xs;
+        }
+    }
+
+    &-previews {
+        @include flex(column, flex-start, stretch);
+        margin-top: 0.25rem;
+        gap: 0.25rem;
+
+        .file-upload-preview-item {
+            @include flex(row, space-between, center);
+            padding: $input-padding-y $input-padding-x;
+            gap: $input-gap;
+            background-color: $input-bg;
+            border: $input-border;
+            border-radius: $input-border-radius;
+
+            &-image-wrapper {
+                position: relative;
+                width: 2rem;
+                height: 2rem;
+
+                .file-upload-preview-item-image {
+                    object-fit: contain;
+                }
+            }
+
+            &-info {
+                @include flex(column, flex-start, flex-start);
+                margin-right: auto;
+
+                .text-muted {
+                    margin-top: 0.25rem;
+                    font-size: $font-size-xs;
+                }
+            }
+        }
+    }
+}

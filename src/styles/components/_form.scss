@@ -1,0 +1,78 @@
+@use "../base/" as *;
+
+.form {
+    @include flex(column, flex-start, stretch);
+    gap: $spacing-md;
+    font-size: $font-size-sm;
+
+    &-title {
+        font-weight: 500;
+        text-align: center;
+    }
+
+    &-body {
+        @include flex(column, flex-start, stretch);
+        gap: $spacing-md;
+
+        .form-group {
+            @include flex(column, flex-start, stretch);
+            gap: $spacing-sm;
+
+            &-label {
+                font-size: $font-size-lg;
+                font-weight: 500;
+            }
+
+            &.form-group-column {
+                .form-group-body {
+                    @include flex(column, flex-start, stretch);
+                    gap: $spacing-md;
+                }
+            }
+
+            &.form-group-row {
+                .form-group-body {
+                    display: grid;
+                    grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
+                    gap: $spacing-md $spacing-sm;
+                }
+            }
+
+            &-body-repeatable-row {
+                @include flex(column, flex-start, stretch);
+                gap: $spacing-sm;
+            }
+
+            .form-field {
+                display: grid;
+                grid-template-rows: subgrid;
+                grid-row: span 2;
+                gap: 0.375rem;
+
+                &:has(.form-field-error) {
+                    grid-row: span 3;
+                }
+
+                .form-checkboxes,
+                .form-radios {
+                    @include flex(row, flex-start, center);
+                    flex-wrap: wrap;
+                    gap: $spacing-sm;
+                }
+
+                &-error {
+                    color: var(--color-danger);
+                }
+            }
+        }
+    }
+
+    &-status {
+        font-size: $font-size-base;
+        text-align: center;
+    }
+
+    .form-submit-button {
+        margin-left: auto;
+    }
+}

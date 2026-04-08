@@ -1,0 +1,75 @@
+@use "../base/" as *;
+
+.sidebar-menu {
+    @include flex(column, flex-start, stretch);
+    width: 100%;
+    gap: $spacing-md;
+    font-size: $font-size-sm;
+
+    &-group {
+        &-label {
+            font-weight: 500;
+        }
+
+        &-list {
+            margin-top: 0.25rem;
+
+            .sidebar-menu-item {
+                .sidebar-menu-link {
+                    @include flex(row, flex-start, center);
+                    width: 100%;
+
+                    &.active {
+                        background-color: var(--color-primary-light);
+                        color: var(--color-primary);
+                    }
+                }
+
+                .sidebar-menu-toggle {
+                    display: none;
+
+                    &:not(:checked) {
+                        +.sidebar-menu-toggle-label {
+                            .icon-chevron-down {
+                                transform: rotate(180deg);
+                            }
+                        }
+
+                        ~.sidebar-menu-dropdown-list {
+                            height: 0 !important;
+                        }
+                    }
+                }
+
+                .sidebar-menu-toggle-label {
+                    @include flex(row, flex-start, center);
+                    padding: 0.625rem 1.25rem;
+                    gap: $spacing-sm;
+                    border-radius: $radius-sm;
+                    cursor: pointer;
+
+                    &:hover {
+                        color: var(--color-primary);
+                    }
+
+                    .icon-chevron-down {
+                        margin-left: auto;
+                        transition: transform 0.3s;
+                    }
+                }
+
+                .sidebar-menu-dropdown-list {
+                    overflow: hidden;
+                    transition: all 0.3s;
+
+                    .sidebar-menu-dropdown-item {
+                        .sidebar-menu-link {
+                            width: 100%;
+                            padding: 0.5rem 1rem 0.5rem 2.75rem;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

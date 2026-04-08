@@ -1,0 +1,92 @@
+@use "../base/" as *;
+
+.site-top-bar {
+    background-color: var(--color-bg-dark);
+    font-size: $font-size-xs;
+    color: var(--color-text-inverse);
+    overflow: hidden;
+
+    &-track {
+        @include flex(row, center, center);
+        padding: $spacing-sm 0;
+
+        &-group {
+            @include flex(row, center, center);
+            padding-right: 12rem;
+            gap: 12rem;
+            animation: marquee 10s linear infinite;
+        }
+
+        span {
+            white-space: nowrap;
+        }
+    }
+}
+
+@keyframes marquee {
+    from {
+        translate: 0;
+    }
+
+    to {
+        translate: -100%;
+    }
+}
+
+.header {
+    padding-top: $spacing-sm;
+    padding-bottom: $spacing-sm;
+    z-index: 10;
+
+    &-inner {
+        @include flex(row, space-between, center);
+
+        .home-btn {
+            @include flex(row, center, center);
+        }
+
+        .header-actions {
+            @include flex(row, center, center);
+            gap: $spacing-sm;
+
+            .icon-user {
+                width: $font-size-2xl;
+            }
+        }
+    }
+}
+
+.header-nav {
+    padding-bottom: $spacing-sm;
+    border-bottom: 1px solid var(--color-border);
+
+    .container {
+        @include flex(row, center, center);
+        gap: $spacing-md;
+
+        .btn-neutral {
+            font-weight: 500;
+
+            &:hover {
+                +.header-nav-dropdown {
+                    @include flex(column, flex-start, flex-start);
+                }
+            }
+        }
+
+        .header-nav-dropdown {
+            position: absolute;
+            position-area: bottom;
+            display: none;
+            padding: 0.75rem 0.25rem;
+            background: var(--color-bg);
+            border-radius: $radius-sm;
+            box-shadow: 0px 0px 12px 2px var(--color-border);
+            z-index: 9;
+
+            &:hover {
+                @include flex(column, flex-start, flex-start);
+            }
+        }
+    }
+}
