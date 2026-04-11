@@ -1,3 +1,7 @@
+<img width="1920" height="1080" alt="Ekran Görüntüsü (568)" src="https://github.com/user-attachments/assets/d839270d-a2d4-4451-a300-4e9177cfd264" />
+<img width="1920" height="1080" alt="Ekran Görüntüsü (569)" src="https://github.com/user-attachments/assets/184c23a1-1542-4c95-9905-83139256349d" />
+
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
