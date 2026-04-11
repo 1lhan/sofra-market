@@ -4,7 +4,7 @@ import AdminCampaignsPageContent from "./AdminCampaignsPageContent";
 
 export default async function AdminCampaignsPage() {
     "use cache"
-    cacheTag("product")
+    cacheTag("products")
     const productOptions = await getProductOptions()
     return <AdminCampaignsPageContent productOptions={productOptions} />
 }

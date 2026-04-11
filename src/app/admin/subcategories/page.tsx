@@ -4,7 +4,7 @@ import AdminSubcategoriesPageContent from "./AdminSubcategoriesPageContent"
 
 export default async function AdminSubcategoriesPage() {
     "use cache"
-    cacheTag("category")
+    cacheTag("categories")
     const categoryOptions = await getCategoryOptions()
     return <AdminSubcategoriesPageContent categoryOptions={categoryOptions} />
 }

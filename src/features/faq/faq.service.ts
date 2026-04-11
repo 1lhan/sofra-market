@@ -8,15 +8,15 @@ import { FaqAdminList, faqAdminListSelect, FaqPublic, faqPublicSelect } from "./
 export async function createFaq(data: CreateFaqFormInput) {
     const { answer, answerImages, ...rest } = data
 
-    const { content, imageUrls } = await prepareEditorContentForCreate(answer, answerImages)
+    const { processedContent, contentImageUrls } = await prepareEditorContentForCreate(answer, answerImages)
 
     try {
         await prisma.faq.create({
-            data: { ...rest, answer: content }
+            data: { ...rest, answer: processedContent }
         })
     }
     catch (error) {
-        await deleteFiles(imageUrls)
+        await deleteFiles(contentImageUrls)
         throw error
     }
 }
@@ -27,20 +27,20 @@ export async function updateFaq(id: string, data: UpdateFaqFormInput) {
     const faq = await prisma.faq.findUnique({ where: { id }, select: { answer: true } })
     if (!faq) throw new AppError("S.S.S bulunamadı", 404)
 
-    const { content, imageUrls, imageUrlsToDelete } = await prepareEditorContentForUpdate(faq.answer, answer, answerImages)
+    const { processedContent, contentImageUrls, contentImageUrlsToDelete } = await prepareEditorContentForUpdate(faq.answer, answer, answerImages)
 
     try {
         await prisma.faq.update({
             where: { id },
-            data: { ...rest, answer: content }
+            data: { ...rest, answer: processedContent }
         })
     }
     catch (error) {
-        await deleteFiles(imageUrls)
+        await deleteFiles(contentImageUrls)
         throw error
     }
 
-    await deleteFiles(imageUrlsToDelete)
+    await deleteFiles(contentImageUrlsToDelete)
 }
 
 export async function deleteFaq(id: string) {

@@ -15,16 +15,16 @@ export const categoryAdminListSelect = {
             products: true
         }
     }
-}
+} satisfies Prisma.CategorySelect
 
 export const categoryWithSubcategoriesSelect = {
     id: true,
     name: true,
     subcategories: {
         select: { id: true, name: true },
-        orderBy: { sortOrder: "asc" as const }
+        orderBy: { sortOrder: "asc" }
     }
-}
+} satisfies Prisma.CategorySelect
 
 export type CategoryAdminList = Prisma.CategoryGetPayload<{ select: typeof categoryAdminListSelect }>
 export type CategoryWithSubcategories = Prisma.CategoryGetPayload<{ select: typeof categoryWithSubcategoriesSelect }>

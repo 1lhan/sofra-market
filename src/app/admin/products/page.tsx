@@ -4,8 +4,7 @@ import AdminProductsPageContent from "./AdminProductsPageContent"
 
 export default async function AdminProductsPage() {
     "use cache"
-    cacheTag("category")
-    cacheTag("subcategory")
+    cacheTag("categories")
     const categoriesWithSubcategories = await getCategoriesWithSubcategories()
     return <AdminProductsPageContent categoriesWithSubcategories={categoriesWithSubcategories} />
 }

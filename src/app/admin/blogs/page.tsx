@@ -4,7 +4,7 @@ import AdminBlogsPageContent from "./AdminBlogsPageContent";
 
 export default async function AdminBlogsPage() {
     "use cache"
-    cacheTag("product")
+    cacheTag("products")
     const productOptions = await getProductOptions()
     return <AdminBlogsPageContent productOptions={productOptions} />
 }

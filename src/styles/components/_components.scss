@@ -25,3 +25,9 @@
         }
     }
 }
+
+.breadcrumb {
+    @include flex(row, flex-start, center);
+    gap: $spacing-sm;
+    font-size: $font-size-sm;
+}

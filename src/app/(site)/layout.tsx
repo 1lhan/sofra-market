@@ -3,9 +3,9 @@ import type { Metadata } from "next";
 import { Work_Sans } from "next/font/google";
 import { Suspense } from "react";
 import "../../styles/main.css";
-import Header from "./Header";
-import HeaderNav from "./HeaderNav";
-import SiteTopBar from "./SiteTopBar";
+import Header from "./(header)/Header";
+import HeaderNav from "./(header)/HeaderNav";
+import SiteTopBar from "./(header)/SiteTopBar";
 
 const workSans = Work_Sans({
     variable: "--font-work-sans",

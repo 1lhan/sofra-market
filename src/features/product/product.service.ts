@@ -1,3 +1,4 @@
+import { Prisma } from "@/generated/prisma/client"
 import { prisma } from "@/lib/prisma"
 import { deleteEditorContentImages, prepareEditorContentForCreate, prepareEditorContentForUpdate } from "@/lib/server/editor-content"
 import { AppError } from "@/lib/server/errors"
@@ -10,7 +11,7 @@ import { ProductAdminList, productAdminListSelect, ProductAdminUpdate, productAd
 export async function createProduct(data: CreateProductFormInput) {
     const { description, descriptionImages, images, ...rest } = data
 
-    if (data.comparePrice && data.comparePrice >= data.price) {
+    if (data.comparePrice && data.price >= data.comparePrice) {
         throw new AppError("İndirimli fiyat, normal fiyattan düşük olmalıdır", 400)
     }
 
@@ -39,13 +40,13 @@ export async function createProduct(data: CreateProductFormInput) {
         throw error
     }
 
-    revalidateTag("product", "max")
+    revalidateTag("products", "max")
 }
 
 export async function updateProduct(id: string, data: UpdateProductFormInput) {
     const { description, descriptionImages, images, initialImages, ...rest } = data
 
-    if (data.comparePrice && data.comparePrice >= data.price) {
+    if (data.comparePrice && data.price >= data.comparePrice) {
         throw new AppError("İndirimli fiyat, normal fiyattan düşük olmalıdır", 400)
     }
 
@@ -89,7 +90,7 @@ export async function updateProduct(id: string, data: UpdateProductFormInput) {
         ...contentImageUrlsToDelete
     ])
 
-    revalidateTag("product", "max")
+    revalidateTag("products", "max")
 }
 
 export async function deleteProduct(id: string) {
@@ -110,7 +111,7 @@ export async function deleteProduct(id: string) {
         throw error
     }
 
-    revalidateTag("product", "max")
+    revalidateTag("products", "max")
 }
 
 export async function getAdminProducts(page: string | undefined, limit: number): Promise<{ total: number, data: ProductAdminList[] }> {
@@ -137,18 +138,67 @@ export async function getProductForUpdate(id: string): Promise<ProductAdminUpdat
     })
 }
 
-export async function getPublicProducts(): Promise<ProductPublic[]> {
-    return prisma.product.findMany({
-        where: { isActive: true },
-        select: productPublicSelect
-    })
+const sortToOrderBy: Record<string, Record<string, string>> = {
+    "featured": { createdAt: "desc" },
+    "best_selling": { createdAt: "desc" },
+    "price_asc": { price: "asc" },
+    "price_desc": { price: "desc" },
+    "name_asc": { title: "asc" },
+    "name_desc": { title: "desc" }
 }
 
-export async function getPublicProductDetail(id: string): Promise<ProductPublicDetail | null> {
-    return prisma.product.findUnique({
-        where: { id, isActive: true },
+export async function getPublicProducts(searchParams: Record<string, string>, limit: number): Promise<{ total: number, data: ProductPublic[] }> {
+    const { categorySlug, price_min, price_max, sort, page } = searchParams
+
+    const pageNumber = Math.max(1, Number(page) || 1)
+    const offset = (pageNumber - 1) * limit
+
+    const where = {
+        ...(categorySlug ? {
+            OR: [
+                { category: { slug: categorySlug } },
+                { subcategory: { slug: categorySlug } }
+            ]
+        } : {}),
+        ...(price_min ? { price: { gte: +price_min } } : {}),
+        ...(price_max ? { price: { lte: +price_max } } : {}),
+        isActive: true
+    } satisfies Prisma.ProductWhereInput
+
+    const [total, products] = await Promise.all([
+        prisma.product.count({ where }),
+        prisma.product.findMany({
+            where,
+            select: productPublicSelect,
+            skip: offset,
+            take: limit,
+            orderBy: sort ? (sortToOrderBy[sort] ?? {}) : {}
+        })
+    ])
+
+    return {
+        total,
+        data: products.map(p => ({
+            ...p,
+            price: +p.price,
+            comparePrice: p.comparePrice ? +p.comparePrice : null
+        }))
+    }
+}
+
+export async function getPublicProductDetail(slug: string): Promise<ProductPublicDetail | null> {
+    const product = await prisma.product.findUnique({
+        where: { slug, isActive: true },
         select: productPublicDetailSelect
     })
+
+    if (!product) return null
+
+    return {
+        ...product,
+        price: +product.price,
+        comparePrice: product.comparePrice ? +product.comparePrice : null
+    }
 }
 
 export async function getProductOptions(): Promise<SelectOption[]> {

@@ -17,7 +17,7 @@ export async function createSubcategory(data: CreateSubcategoryFormInput) {
         throw error
     }
 
-    revalidateTag("subcategory", "max")
+    revalidateTag("categories", "max")
 }
 
 export async function updateSubcategory(id: string, data: UpdateSubcategoryFormInput) {
@@ -35,7 +35,7 @@ export async function updateSubcategory(id: string, data: UpdateSubcategoryFormI
         throw error
     }
 
-    revalidateTag("subcategory", "max")
+    revalidateTag("categories", "max")
 }
 
 export async function deleteSubcategory(id: string) {
@@ -47,7 +47,7 @@ export async function deleteSubcategory(id: string) {
         throw error
     }
 
-    revalidateTag("subcategory", "max")
+    revalidateTag("categories", "max")
 }
 
 export async function getAdminSubcategories(): Promise<SubcategoryAdminList[]> {

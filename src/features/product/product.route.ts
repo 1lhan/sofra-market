@@ -47,15 +47,15 @@ export const adminProductRoutes = new Elysia({ prefix: "/admin/products" })
 export const publicProductRoutes = new Elysia({ prefix: "/products" })
     .get(
         "/",
-        async () => {
-            const data = await getPublicProducts()
+        async ({ query }) => {
+            const data = await getPublicProducts(query, 20)
             return { success: true, data }
         }
     )
     .get(
-        "/:id",
-        async ({ params: { id } }) => {
-            const data = await getPublicProductDetail(id)
+        "/:slug",
+        async ({ params: { slug } }) => {
+            const data = await getPublicProductDetail(slug)
             return { success: true, data }
         }
     )

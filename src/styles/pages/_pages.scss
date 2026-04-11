@@ -63,3 +63,138 @@
         }
     }
 }
+
+.category-page {
+    padding-top: $spacing-md;
+    padding-bottom: $spacing-md;
+
+    &-main {
+        @include flex(row, flex-start, flex-start);
+        margin-top: $spacing-md;
+        gap: $spacing-lg;
+
+        .filters {
+            min-width: 15rem;
+            height: 40rem;
+        }
+
+        .products-section {
+            flex: 1;
+
+            &-header {
+                @include flex(row, space-between, center);
+                flex-wrap: wrap;
+                gap: $spacing-sm;
+
+                .custom-select {
+                    width: 12rem;
+                    margin-left: auto;
+                }
+            }
+
+            .products {
+                display: grid;
+                grid-template-columns: repeat(auto-fill, minmax(min(16rem, 100%), 1fr));
+                gap: $spacing-md;
+                margin-top: $spacing-md;
+
+                .product-card {
+                    display: grid;
+                    grid-template-rows: subgrid;
+                    grid-row: span 3;
+                    gap: 0;
+
+                    &-image {
+                        position: relative;
+                        aspect-ratio: 1;
+
+                        img {
+                            border: 1px solid var(--color-border);
+                            border-radius: $radius-lg;
+                        }
+                    }
+
+                    &-title {
+                        margin-top: $spacing-sm;
+                        font-size: $font-size-sm;
+                        font-weight: 500;
+                        align-items: start;
+                    }
+
+                    &-footer {
+                        @include flex(row, space-between, stretch);
+                        margin-top: $spacing-sm;
+
+                        .product-card-price {
+                            @include flex(row, flex-start, stretch);
+                            gap: $spacing-sm;
+
+                            .product-card-discount {
+                                @include flex(row, center, center);
+                                padding: 0.25rem;
+                                border: 1px solid var(--color-danger);
+                                border-radius: $radius-md;
+                                font-size: $font-size-sm;
+                                color: var(--color-danger);
+                            }
+
+                            div {
+                                @include flex(column, center, flex-start);
+
+                                .text-muted {
+                                    font-size: $font-size-sm;
+                                    text-decoration: line-through;
+                                }
+
+                                .price {
+                                    font-size: $font-size-lg;
+                                    font-weight: 600;
+                                }
+                            }
+                        }
+
+                        .icon-shopping-bag-plus {
+                            width: $font-size-xl;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+.products-skeleton {
+    .product-card {
+        &-image {
+            background: var(--color-surface-hover);
+            border-radius: $radius-lg;
+            animation: skeleton-pulse 1.5s ease-in-out infinite;
+        }
+
+        &-title {
+            height: $font-size-sm * 2;
+            background: var(--color-surface-hover);
+            border-radius: $radius-md;
+            animation: skeleton-pulse 1.5s ease-in-out infinite 0.1s;
+        }
+
+        &-footer {
+            height: 40px;
+
+            .product-card-price {
+                width: 30%;
+                background: var(--color-surface-hover);
+                border-radius: $radius-md;
+                animation: skeleton-pulse 1.5s ease-in-out infinite 0.2s;
+
+            }
+
+            .product-card-add-to-cart-btn {
+                aspect-ratio: 1;
+                background: var(--color-surface-hover);
+                border-radius: $radius-md;
+                animation: skeleton-pulse 1.5s ease-in-out infinite 0.2s;
+            }
+        }
+    }
+}

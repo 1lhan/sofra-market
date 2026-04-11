@@ -36,7 +36,7 @@ export default function SignInForm() {
                         ]
                     }
                 ]}
-                title="Oturum Aç"
+                title="Giriş Yap"
                 submitLabel="Giriş Yap"
                 onSubmit={handleLogin}
                 status={formStatus}

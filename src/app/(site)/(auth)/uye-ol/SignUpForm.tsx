@@ -27,8 +27,8 @@ export default function SignUpForm() {
                         ]
                     }
                 ]}
-                title="Sign Up"
-                submitLabel="Sign Up"
+                title="Üye Ol"
+                submitLabel="Üye Ol"
                 onSubmit={handleRegister}
                 status={formStatus}
             />

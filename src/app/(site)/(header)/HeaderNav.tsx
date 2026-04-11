@@ -6,8 +6,7 @@ import { Fragment } from "react/jsx-runtime";
 
 export default async function HeaderNav() {
     "use cache"
-    cacheTag("category")
-    cacheTag("subcategory")
+    cacheTag("categories")
 
     const categories = await prisma.category.findMany({
         select: {
@@ -29,7 +28,7 @@ export default async function HeaderNav() {
 
                     return (
                         <Fragment key={slug}>
-                            <Button color="neutral" variant="ghost" shape="compact" href={`/${slug}`} {...(hasSubcategories && { style: { anchorName: `--category-${slug}` } })}>
+                            <Button color="neutral" variant="ghost" shape="compact" href={`/kategori/${slug}`} {...(hasSubcategories && { style: { anchorName: `--category-${slug}` } })}>
                                 {name}
                                 {subcategories.length > 0 && <Icon name="chevron-down" size="sm" />}
                             </Button>
@@ -37,7 +36,7 @@ export default async function HeaderNav() {
                             {hasSubcategories && (
                                 <div className="header-nav-dropdown" style={{ positionAnchor: `--category-${slug}` }}>
                                     {subcategories.map(sub =>
-                                        <Button color="neutral" variant="ghost" shape="compact" href={`/${sub.slug}`} key={sub.slug}>
+                                        <Button color="neutral" variant="ghost" shape="compact" href={`/kategori/${sub.slug}`} key={sub.slug}>
                                             {sub.name}
                                         </Button>
                                     )}

@@ -1,9 +1,9 @@
 import { prisma } from "@/lib/prisma"
 import { AppError } from "@/lib/server/errors"
 import { SelectOption } from "@/lib/types"
-import { revalidateTag } from "next/cache"
+import { cacheTag, revalidateTag } from "next/cache"
 import { CreateCategoryFormInput, UpdateCategoryFormInput } from "./category.schema"
-import { CategoryAdminList, categoryAdminListSelect, CategoryWithSubcategories, categoryWithSubcategoriesSelect, } from "./category.types"
+import { CategoryAdminList, categoryAdminListSelect, CategoryWithSubcategories, categoryWithSubcategoriesSelect } from "./category.types"
 
 export async function createCategory(data: CreateCategoryFormInput) {
     try {
@@ -17,7 +17,7 @@ export async function createCategory(data: CreateCategoryFormInput) {
         throw error
     }
 
-    revalidateTag("category", "max")
+    revalidateTag("categories", "max")
 }
 
 export async function updateCategory(id: string, data: UpdateCategoryFormInput) {
@@ -37,7 +37,7 @@ export async function updateCategory(id: string, data: UpdateCategoryFormInput) 
         throw error
     }
 
-    revalidateTag("category", "max")
+    revalidateTag("categories", "max")
 }
 
 export async function deleteCategory(id: string) {
@@ -50,7 +50,7 @@ export async function deleteCategory(id: string) {
         throw error
     }
 
-    revalidateTag("category", "max")
+    revalidateTag("categories", "max")
 }
 
 export async function getAdminCategories(): Promise<CategoryAdminList[]> {
@@ -73,5 +73,22 @@ export async function getCategoriesWithSubcategories(): Promise<CategoryWithSubc
     return prisma.category.findMany({
         select: categoryWithSubcategoriesSelect,
         orderBy: { sortOrder: "asc" }
+    })
+}
+
+export async function getCategoryBySlug(slug: string) {
+    "use cache"
+    //cacheLife("max")
+    cacheTag("categories")
+
+    return prisma.category.findFirst({
+        where: { OR: [{ slug }, { subcategories: { some: { slug } } }] },
+        select: {
+            name: true,
+            slug: true,
+            subcategories: {
+                select: { name: true, slug: true }
+            }
+        }
     })
 }
