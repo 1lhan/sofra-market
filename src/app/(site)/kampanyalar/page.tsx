@@ -1,13 +1,14 @@
 import Button from "@/components/ui/Button"
 import { getPublicCampaigns } from "@/features/campaign/campaign.service"
 import { getPublicCoupons } from "@/features/coupon/coupon.service"
-import { cacheTag } from "next/cache"
+import { cacheLife, cacheTag } from "next/cache"
 import Image from "next/image"
 
 export default async function CampaignsPage() {
     "use cache"
-    cacheTag("category")
-    cacheTag("subcategory")
+    cacheLife("max")
+    cacheTag("campaigns")
+    cacheTag("coupons")
     const [campaigns, coupons] = await Promise.all([getPublicCampaigns(), getPublicCoupons()])
 
     return (

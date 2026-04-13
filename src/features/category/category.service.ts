@@ -1,7 +1,7 @@
 import { prisma } from "@/lib/prisma"
 import { AppError } from "@/lib/server/errors"
 import { SelectOption } from "@/lib/types"
-import { cacheTag, revalidateTag } from "next/cache"
+import { cacheLife, cacheTag, revalidateTag } from "next/cache"
 import { CreateCategoryFormInput, UpdateCategoryFormInput } from "./category.schema"
 import { CategoryAdminList, categoryAdminListSelect, CategoryWithSubcategories, categoryWithSubcategoriesSelect } from "./category.types"
 
@@ -22,10 +22,7 @@ export async function createCategory(data: CreateCategoryFormInput) {
 
 export async function updateCategory(id: string, data: UpdateCategoryFormInput) {
     try {
-        await prisma.category.update({
-            where: { id },
-            data
-        })
+        await prisma.category.update({ where: { id }, data })
     }
     catch (error) {
         if ((error as any)?.code === "P2025") throw new AppError("Kategori bulunamadı", 404)
@@ -78,7 +75,7 @@ export async function getCategoriesWithSubcategories(): Promise<CategoryWithSubc
 
 export async function getCategoryBySlug(slug: string) {
     "use cache"
-    //cacheLife("max")
+    cacheLife("max")
     cacheTag("categories")
 
     return prisma.category.findFirst({

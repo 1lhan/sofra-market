@@ -2,6 +2,7 @@ import { getCategoryBySlug } from "@/features/category/category.service"
 import { getPublicProducts } from "@/features/product/product.service"
 import { prisma } from "@/lib/prisma"
 import { Metadata } from "next"
+import { cacheLife, cacheTag } from "next/cache"
 import { notFound } from "next/navigation"
 import Breadcrumb from "../../Breadcrumb"
 import CategoryPageMain from "./CategoryPageMain"
@@ -52,8 +53,10 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
 export default async function CategoryPage({ params }: { params: Promise<{ slug: string }> }) {
     "use cache"
-    const { slug } = await params
+    cacheLife("hours")
+    cacheTag("products")
 
+    const { slug } = await params
     const [category, initialProducts] = await Promise.all([
         getCategoryBySlug(slug),
         getPublicProducts({ categorySlug: slug }, 20)

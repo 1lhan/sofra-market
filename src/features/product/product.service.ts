@@ -52,7 +52,7 @@ export async function updateProduct(id: string, data: UpdateProductFormInput) {
 
     const product = await prisma.product.findUnique({
         where: { id },
-        select: { description: true, images: true }
+        select: { slug: true, description: true, images: true }
     })
 
     if (!product) throw new AppError("Ürün bulunamadı", 404)
@@ -91,27 +91,32 @@ export async function updateProduct(id: string, data: UpdateProductFormInput) {
     ])
 
     revalidateTag("products", "max")
+    revalidateTag(`product-${product.slug}`, "max")
+    if (data.slug !== product.slug) {
+        revalidateTag(`product-${data.slug}`, "max")
+    }
 }
 
 export async function deleteProduct(id: string) {
     try {
         const deleted = await prisma.product.delete({
             where: { id },
-            select: { images: true, description: true }
+            select: { slug: true, images: true, description: true }
         })
 
         await Promise.all([
             deleteFiles(deleted.images),
             deleteEditorContentImages(deleted.description)
         ])
+
+        revalidateTag("products", "max")
+        revalidateTag(`product-${deleted.slug}`, "max")
     }
     catch (error) {
         if ((error as any)?.code === "P2025") throw new AppError("Ürün bulunamadı", 404)
         if ((error as any)?.cause?.originalCode === "23001") throw new AppError("Bu ürüne ait siparişler olduğu için silinemez", 400)
         throw error
     }
-
-    revalidateTag("products", "max")
 }
 
 export async function getAdminProducts(page: string | undefined, limit: number): Promise<{ total: number, data: ProductAdminList[] }> {
@@ -139,12 +144,12 @@ export async function getProductForUpdate(id: string): Promise<ProductAdminUpdat
 }
 
 const sortToOrderBy: Record<string, Record<string, string>> = {
-    "featured": { createdAt: "desc" },
-    "best_selling": { createdAt: "desc" },
-    "price_asc": { price: "asc" },
-    "price_desc": { price: "desc" },
-    "name_asc": { title: "asc" },
-    "name_desc": { title: "desc" }
+    featured: { createdAt: "desc" },
+    best_selling: { createdAt: "desc" },
+    price_asc: { price: "asc" },
+    price_desc: { price: "desc" },
+    name_asc: { title: "asc" },
+    name_desc: { title: "desc" }
 }
 
 export async function getPublicProducts(searchParams: Record<string, string>, limit: number): Promise<{ total: number, data: ProductPublic[] }> {

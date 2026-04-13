@@ -1,9 +1,11 @@
 import { getPublicProductDetail } from "@/features/product/product.service"
 import { prisma } from "@/lib/prisma"
 import { Metadata } from "next"
-import { cacheTag } from "next/cache"
+import { cacheLife, cacheTag } from "next/cache"
 import { notFound } from "next/navigation"
 import Breadcrumb from "../../Breadcrumb"
+import { ProductCartActions, ProductFavoriteButton, ProductGallery } from "./ProductDetailPageComponents"
+import { ProductReviewsSummary } from "./ProductReviewsSummary"
 
 export async function generateStaticParams() {
     return prisma.product.findMany({
@@ -15,7 +17,7 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
     "use cache"
     const { slug } = await params
-    //cacheLife("max")
+    cacheLife("max")
     cacheTag(`product-${slug}`)
 
     const product = await prisma.product.findUnique({
@@ -48,19 +50,20 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     }
 }
 
-export default async function ProductDetailPage({ params }: { params: { slug: string } }) {
+export default async function ProductDetailPage({ params }: { params: Promise<{ slug: string }> }) {
     "use cache"
     const { slug } = await params
-    //cacheLife("max")
+    cacheLife("max")
     cacheTag(`product-${slug}`)
     cacheTag("categories")
+    cacheTag("campaigns")
 
     const product = await getPublicProductDetail(slug)
 
     if (!product) notFound()
 
     const discountPct = product.comparePrice
-        ? Math.round(((product.comparePrice - product.price) / product.comparePrice) * -100)
+        ? Math.round(((product.comparePrice - product.price) / product.comparePrice) * 100)
         : null
 
     return (
@@ -71,20 +74,30 @@ export default async function ProductDetailPage({ params }: { params: { slug: st
                 product={{ label: product.title, slug: product.slug }}
             />
             <main>
-                <div className="product-images">
-                    {/* <Image className="big-image" src={""} alt="" /> */}
-                    <div className="product-images-thumbnails"></div>
-                </div>
-                <div className="product-info">
-                    <h2 className="product-title">{product.title}</h2>
-                    <div className="product-reviews"></div>
-                    <div className="product-price">
-                        {discountPct && <span className="product-discount-pct">{discountPct}</span>}
-                        {product.comparePrice && <span className="product-compare-price">{product.comparePrice}</span>}
-                        <span className="product-current-price">{product.price}</span>
+                <ProductGallery images={product.images} title={product.title} />
+                <section className="product-info">
+                    <div className="product-header">
+                        <h1 className="product-title">{product.title}</h1>
+                        <ProductFavoriteButton />
                     </div>
+                    <ProductReviewsSummary slug={product.slug} />
+                    <div className="product-price">
+                        {discountPct && <span className="product-price-discount-pct">{`-%${discountPct}`}</span>}
+                        <div>
+                            {product.comparePrice && <span className="product-price-original">{`${product.comparePrice} ₺`}</span>}
+                            <span className="product-price-current">{`${product.price} ₺`}</span>
+                        </div>
+                    </div>
+                    {product.campaigns.length > 0 && (
+                        <ul className="product-campaigns">
+                            {product.campaigns.map((campaign, index) =>
+                                <li key={index}>{campaign.title}</li>
+                            )}
+                        </ul>
+                    )}
+                    <ProductCartActions />
                     <p className="product-excerpt">{product.excerpt}</p>
-                </div>
+                </section>
             </main>
         </div>
     )

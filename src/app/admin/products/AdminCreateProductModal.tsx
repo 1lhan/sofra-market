@@ -23,7 +23,7 @@ export default function AdminCreateProductModal({ isCreateModalOpen, categoriesW
             return
         }
 
-        queryClient.refetchQueries({ queryKey: ["admin-products"] })
+        queryClient.invalidateQueries({ queryKey: ["admin-products"] }) //,
         batch(() => {
             formStatus.value = null
             isCreateModalOpen.value = false

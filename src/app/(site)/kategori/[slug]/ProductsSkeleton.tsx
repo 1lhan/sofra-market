@@ -5,6 +5,7 @@ export default function ProductsSkeleton() {
                 <div className="product-card" key={i}>
                     <div className="product-card-image" />
                     <div className="product-card-title" />
+                    <div className="product-card-reviews-summary" />
                     <div className="product-card-footer">
                         <div className="product-card-price" />
                         <div className="product-card-add-to-cart-btn" />

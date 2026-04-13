@@ -1,6 +1,7 @@
 "use client"
 
 import { CustomSelect } from "@/components/inputs/CustomSelect";
+import { RatingStars } from "@/components/RatingStars";
 import Button from "@/components/ui/Button";
 import Icon from "@/components/ui/Icon";
 import { ProductPublic } from "@/features/product/product.types";
@@ -23,7 +24,7 @@ export default function CategoryPageMain({ slug, initialProducts }: { slug: stri
             return data.data
         },
         initialData: searchParams.toString() === "" ? initialProducts : undefined,
-        placeholderData: (previousData) => previousData,
+        placeholderData: (previousData) => previousData
     })
 
     return (
@@ -60,23 +61,28 @@ export default function CategoryPageMain({ slug, initialProducts }: { slug: stri
 
                 {!isLoading && data && (
                     <div className="products">
-                        {data.data.map(({ title, slug, price, comparePrice, images }) => {
+                        {data.data.map(({ title, slug, price, comparePrice, images, averageRating, _count }) => {
                             const discountPct = comparePrice
-                                ? Math.round(((comparePrice - price) / comparePrice) * -100)
+                                ? Math.round(((comparePrice - price) / comparePrice) * 100)
                                 : null
 
                             return (
                                 <div className="product-card" key={slug}>
                                     <Link className="product-card-image" href={`/urun/${slug}`}>
-                                        {images.length > 0 && <Image src={images[0]} alt={title} fill sizes="500px" />}
+                                        {images.length > 0 && <Image src={images[0]} alt={title} fill sizes="(max-width: 768px) 50vw, 25vw" />}
                                     </Link>
                                     <Button className="product-card-title" color="neutral" variant="ghost" href={`/urun/${slug}`}>{title}</Button>
+                                    <div className="product-card-reviews-summary">
+                                        <span>{averageRating}</span>
+                                        <RatingStars average={averageRating} id={slug} />
+                                        <span>{`(${_count.reviews})`}</span>
+                                    </div>
                                     <div className="product-card-footer">
                                         <div className="product-card-price">
-                                            {discountPct && <span className="product-card-discount">{discountPct}%</span>}
+                                            {discountPct && <span className="product-card-price-discount-pct">{`-%${discountPct}`}</span>}
                                             <div>
-                                                {comparePrice && <span className="text-muted">{comparePrice} ₺</span>}
-                                                <span className="price">{price} ₺</span>
+                                                {comparePrice && <span className="product-card-price-original">{`${comparePrice} ₺`}</span>}
+                                                <span className="product-card-price-current">{`${price} ₺`}</span>
                                             </div>
                                         </div>
                                         <Button color="primary" variant="filled" shape="compact">

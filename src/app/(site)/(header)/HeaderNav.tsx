@@ -1,11 +1,12 @@
 import Button from "@/components/ui/Button";
 import Icon from "@/components/ui/Icon";
 import { prisma } from "@/lib/prisma";
-import { cacheTag } from "next/cache";
+import { cacheLife, cacheTag } from "next/cache";
 import { Fragment } from "react/jsx-runtime";
 
 export default async function HeaderNav() {
     "use cache"
+    cacheLife("max")
     cacheTag("categories")
 
     const categories = await prisma.category.findMany({

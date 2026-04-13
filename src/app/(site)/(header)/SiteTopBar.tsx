@@ -1,10 +1,11 @@
 import { prisma } from "@/lib/prisma";
-import { cacheTag } from "next/cache";
+import { cacheLife, cacheTag } from "next/cache";
 
 export default async function SiteTopBar() {
     "use cache"
-    cacheTag("public-campaigns")
-    cacheTag("public-coupons")
+    cacheLife("max")
+    cacheTag("campaigns")
+    cacheTag("coupons")
 
     const [coupon, freeShippingCampaign] = await Promise.all([
         prisma.coupon.findFirst({

@@ -4,7 +4,7 @@ import { t } from "elysia"
 export const createProductSchema = t.Object({
     title: t.String({ minLength: 3, maxLength: 200 }),
     slug: t.String({ minLength: 3, maxLength: 200 }),
-    excerpt: t.String({ minLength: 3, maxLength: 500 }),
+    excerpt: t.String({ minLength: 3, maxLength: 750 }),
     description: t.String(),
     descriptionImages: t.Optional(t.Files({ type: ["image/webp", "image/jpeg"], maxSize: "500k", minItems: 0, maxItems: 10 })),
     price: t.Numeric({ minimum: 1 }),

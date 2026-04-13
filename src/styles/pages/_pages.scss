@@ -84,6 +84,7 @@
             &-header {
                 @include flex(row, space-between, center);
                 flex-wrap: wrap;
+                margin-bottom: $spacing-md;
                 gap: $spacing-sm;
 
                 .custom-select {
@@ -96,13 +97,12 @@
                 display: grid;
                 grid-template-columns: repeat(auto-fill, minmax(min(16rem, 100%), 1fr));
                 gap: $spacing-md;
-                margin-top: $spacing-md;
 
                 .product-card {
                     display: grid;
                     grid-template-rows: subgrid;
-                    grid-row: span 3;
-                    gap: 0;
+                    grid-row: span 4;
+                    gap: 0.375rem;
 
                     &-image {
                         position: relative;
@@ -110,28 +110,38 @@
 
                         img {
                             border: 1px solid var(--color-border);
-                            border-radius: $radius-lg;
+                            border-radius: $radius-sm;
                         }
                     }
 
                     &-title {
-                        margin-top: $spacing-sm;
                         font-size: $font-size-sm;
                         font-weight: 500;
                         align-items: start;
                     }
 
+                    &-reviews-summary {
+                        @include flex(row, flex-start, center);
+                        gap: 0.25rem;
+                        font-size: $font-size-sm;
+
+                        .rating-stars {
+                            svg {
+                                width: $font-size-sm;
+                            }
+                        }
+                    }
+
                     &-footer {
                         @include flex(row, space-between, stretch);
-                        margin-top: $spacing-sm;
 
                         .product-card-price {
                             @include flex(row, flex-start, stretch);
                             gap: $spacing-sm;
 
-                            .product-card-discount {
+                            &-discount-pct {
                                 @include flex(row, center, center);
-                                padding: 0.25rem;
+                                padding: 0 0.25rem;
                                 border: 1px solid var(--color-danger);
                                 border-radius: $radius-md;
                                 font-size: $font-size-sm;
@@ -141,12 +151,12 @@
                             div {
                                 @include flex(column, center, flex-start);
 
-                                .text-muted {
+                                .product-card-price-original {
                                     font-size: $font-size-sm;
                                     text-decoration: line-through;
                                 }
 
-                                .price {
+                                .product-card-price-current {
                                     font-size: $font-size-lg;
                                     font-weight: 600;
                                 }
@@ -154,7 +164,7 @@
                         }
 
                         .icon-shopping-bag-plus {
-                            width: $font-size-xl;
+                            width: $font-size-lg;
                         }
                     }
                 }
@@ -178,6 +188,14 @@
             animation: skeleton-pulse 1.5s ease-in-out infinite 0.1s;
         }
 
+        &-reviews-summary {
+            width: 50%;
+            height: 1rem;
+            background: var(--color-surface-hover);
+            border-radius: $radius-md;
+            animation: skeleton-pulse 1.5s ease-in-out infinite 0.2s;
+        }
+
         &-footer {
             height: 40px;
 
@@ -185,7 +203,7 @@
                 width: 30%;
                 background: var(--color-surface-hover);
                 border-radius: $radius-md;
-                animation: skeleton-pulse 1.5s ease-in-out infinite 0.2s;
+                animation: skeleton-pulse 1.5s ease-in-out infinite 0.3s;
 
             }
 
@@ -193,7 +211,143 @@
                 aspect-ratio: 1;
                 background: var(--color-surface-hover);
                 border-radius: $radius-md;
-                animation: skeleton-pulse 1.5s ease-in-out infinite 0.2s;
+                animation: skeleton-pulse 1.5s ease-in-out infinite 0.3s;
+            }
+        }
+    }
+}
+
+.product-detail-page {
+    padding-top: $spacing-md;
+    padding-bottom: $spacing-md;
+
+    main {
+        @include flex(row, flex-start, flex-start);
+        flex-wrap: wrap;
+        margin-top: $spacing-md;
+        gap: $spacing-lg;
+
+        .product-gallery {
+            @include flex(row, flex-start, flex-start);
+            flex: 5.5;
+            gap: $spacing-md;
+
+            &-main {
+                border: 1px solid var(--color-surface-hover);
+                border-radius: $radius-lg;
+            }
+
+            &-thumbnails {
+                @include flex(column, flex-start, flex-start);
+                gap: $spacing-md;
+
+                .product-gallery-thumbnail {
+                    border: 1px solid var(--color-surface-hover);
+                    border-radius: $radius-sm;
+                }
+            }
+        }
+
+        .product-info {
+            @include flex(column, flex-start, stretch);
+            flex: 4.5;
+            gap: $spacing-md;
+
+            .product-header {
+                @include flex(row, space-between, flex-start);
+                gap: $spacing-sm;
+
+                .product-title {
+                    font-size: $font-size-3xl;
+                    font-weight: 500;
+                }
+            }
+
+            .product-reviews-summary {
+                @include flex(row, flex-start, center);
+
+                .product-average-rating {
+                    margin-right: 0.25rem;
+                    font-weight: 500;
+                }
+
+                .product-reviews-count {
+                    margin-left: $spacing-sm;
+                    font-size: $font-size-sm;
+                }
+            }
+
+            .product-price {
+                @include flex(row, flex-start, stretch);
+                gap: $spacing-sm;
+
+                &-discount-pct {
+                    @include flex(row, center, center);
+                    padding: 0 $spacing-sm;
+                    border: 1px solid var(--color-danger);
+                    border-radius: $radius-lg;
+                    font-size: $font-size-lg;
+                    color: var(--color-danger);
+                }
+
+                div {
+                    @include flex(column, center, flex-start);
+
+                    .product-price-original {
+                        font-size: $font-size-lg;
+                        text-decoration: line-through;
+                    }
+
+                    .product-price-current {
+                        font-size: $font-size-2xl;
+                        font-weight: 600;
+                    }
+                }
+            }
+
+            .product-campaigns {
+                @include flex(row, flex-start, center);
+                flex-wrap: wrap;
+                gap: $spacing-sm;
+
+                li {
+                    padding: 0.75rem;
+                    border: 1px solid var(--color-primary);
+                    border-radius: $radius-lg;
+                }
+            }
+
+            .product-cart-actions {
+                @include flex(row, flex-start, center);
+                gap: $spacing-lg;
+
+                .product-quantity {
+                    @include flex(row, center, stretch);
+                    height: 2.75rem;
+                    border-radius: $radius-lg;
+                    overflow: hidden;
+
+                    .btn-surface {
+                        aspect-ratio: 1;
+                        border-radius: 0;
+                    }
+
+                    .input-field {
+                        width: 3rem;
+                        border-radius: 0;
+                        text-align: center;
+                    }
+                }
+
+                .btn-primary {
+                    flex: 0 1 50%;
+                }
+            }
+
+            .product-excerpt {
+                font-size: $font-size-sm;
+                line-height: 1.4;
+                color: var(--color-text-muted);
             }
         }
     }

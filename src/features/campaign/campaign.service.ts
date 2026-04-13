@@ -57,7 +57,7 @@ export async function createCampaign(data: CreateCampaignFormInput) {
         throw error
     }
 
-    revalidateTag("category", "max")
+    revalidateTag("campaigns", "max")
 }
 
 export async function updateCampaign(id: string, data: UpdateCampaignFormInput) {
@@ -141,7 +141,7 @@ export async function updateCampaign(id: string, data: UpdateCampaignFormInput) 
 
     if (campaign.image && (image || !initialImage?.length)) await deleteFiles([campaign.image])
 
-    revalidateTag("category", "max")
+    revalidateTag("campaigns", "max")
 }
 
 export async function deleteCampaign(id: string) {
@@ -158,7 +158,7 @@ export async function deleteCampaign(id: string) {
         throw error
     }
 
-    revalidateTag("category", "max")
+    revalidateTag("campaigns", "max")
 }
 
 export async function getAdminCampaigns(page: string | undefined, limit: number): Promise<{ total: number, data: CampaignAdminList[] }> {

@@ -29,7 +29,7 @@ export async function createCoupon(data: CreateCouponFormInput) {
         throw error
     }
 
-    revalidateTag("public-coupons", "max")
+    revalidateTag("coupons", "max")
 }
 
 export async function updateCoupon(id: string, data: UpdateCouponFormInput) {
@@ -79,7 +79,7 @@ export async function updateCoupon(id: string, data: UpdateCouponFormInput) {
 
     if (coupon.image && (image || !initialImage?.length)) await deleteFiles([coupon.image])
 
-    revalidateTag("public-coupons", "max")
+    revalidateTag("coupons", "max")
 }
 
 export async function deleteCoupon(id: string) {
@@ -92,7 +92,7 @@ export async function deleteCoupon(id: string) {
         throw error
     }
 
-    revalidateTag("public-coupons", "max")
+    revalidateTag("coupons", "max")
 }
 
 export async function getAdminCoupons(page: string | undefined, limit: number): Promise<{ total: number, data: CouponAdminList[] }> {

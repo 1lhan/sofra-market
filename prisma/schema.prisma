@@ -120,6 +120,7 @@ model Product {
   price            Decimal       @db.Decimal(10, 2)
   comparePrice     Decimal?      @db.Decimal(10, 2)  @map("compare_price")
   stock            Int           @default(0)
+  averageRating    Float         @default(0)         @map("average_rating")
   images           String[]
   isActive         Boolean       @default(true)  @map("is_active")
   categoryId       String        @map("category_id")

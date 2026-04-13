@@ -42,7 +42,13 @@ export const productPublicSelect = {
     slug: true,
     price: true,
     comparePrice: true,
-    images: true
+    images: true,
+    averageRating: true,
+    _count: {
+        select: {
+            reviews: true
+        }
+    }
 } satisfies Prisma.ProductSelect
 
 export const productPublicDetailSelect = {
@@ -63,6 +69,11 @@ export const productPublicDetailSelect = {
         select: {
             name: true,
             slug: true
+        }
+    },
+    campaigns: {
+        select: {
+            title: true
         }
     }
 } satisfies Prisma.ProductSelect

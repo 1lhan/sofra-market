@@ -31,3 +31,20 @@
     gap: $spacing-sm;
     font-size: $font-size-sm;
 }
+
+.rating-stars {
+    @include flex(row, center, center);
+    gap: 2px;
+
+    svg {
+        width: $font-size-base;
+
+        stop:first-child {
+            stop-color: var(--color-warning);
+        }
+
+        stop:last-child {
+            stop-color: var(--color-border);
+        }
+    }
+}
