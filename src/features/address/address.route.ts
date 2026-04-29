@@ -1,12 +1,15 @@
-import { authorizeUser } from "@/lib/session";
+import { auth } from "@/lib/auth";
+import { AppError } from "@/lib/server/errors";
 import Elysia from "elysia";
+import { headers } from "next/headers";
 import { createAddressSchema, updateAddressSchema } from "./address.schema";
-import { createAddress, deleteAddress, getUserAddresses, updateAddress } from "./address.service";
+import { createAddress, deleteAddress, getUserAddresses, setDefaultAddress, updateAddress } from "./address.service";
 
 export const authenticatedAddressRoutes = new Elysia({ prefix: "/addresses" })
     .derive(async () => {
-        const userId = await authorizeUser()
-        return { userId }
+        const session = await auth.api.getSession({ headers: await headers() })
+        if (!session) throw new AppError("UNAUTHORIZED", 401)
+        return { userId: session.user.id }
     })
     .get(
         "/",
@@ -35,6 +38,13 @@ export const authenticatedAddressRoutes = new Elysia({ prefix: "/addresses" })
         "/:addressId",
         async ({ params: { addressId }, userId }) => {
             await deleteAddress(addressId, userId)
+            return { success: true }
+        }
+    )
+    .patch(
+        "/:addressId/default",
+        async ({ params: { addressId }, userId }) => {
+            await setDefaultAddress(addressId, userId)
             return { success: true }
         }
     )

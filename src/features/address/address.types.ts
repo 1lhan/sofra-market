@@ -1,6 +1,6 @@
 import { Prisma } from "@/generated/prisma/client"
 
-export const UserAddressSelect: Prisma.AddressSelect = {
+export const userAddressSelect: Prisma.AddressSelect = {
     id: true,
     title: true,
     firstName: true,
@@ -19,4 +19,4 @@ export const UserAddressSelect: Prisma.AddressSelect = {
     isEInvoice: true
 }
 
-export type UserAddress = Prisma.AddressGetPayload<{ select: typeof UserAddressSelect }>
+export type UserAddress = Prisma.AddressGetPayload<{ select: typeof userAddressSelect }>

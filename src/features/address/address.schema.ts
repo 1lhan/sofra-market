@@ -8,10 +8,10 @@ export const createAddressSchema = t.Object({
     phone: t.String({ minLength: 10, maxLength: 15 }),
     city: t.String({ minLength: 2, maxLength: 50 }),
     district: t.String({ minLength: 2, maxLength: 50 }),
-    neighborhood: t.String({ minLength: 2, maxLength: 100 }),
-    addressLine: t.String({ minLength: 5, maxLength: 200 }),
+    neighborhood: t.String({ minLength: 2, maxLength: 150 }),
+    addressLine: t.String({ minLength: 5, maxLength: 300 }),
     postalCode: t.Transform(
-        t.String({ minLength: 5, maxLength: 10 })
+        t.String({ minLength: 5, maxLength: 5 })
     )
         .Decode(v => v === "" ? null : v)
         .Encode(v => v === null ? "" : v),
@@ -19,7 +19,7 @@ export const createAddressSchema = t.Object({
     companyName: t.Optional(t.String({ minLength: 2, maxLength: 100 })),
     taxNumber: t.Optional(t.String({ minLength: 10, maxLength: 11 })),
     taxOffice: t.Optional(t.String({ minLength: 2, maxLength: 100 })),
-    isEInvoice: t.BooleanString()
+    isEInvoice: t.Optional(t.BooleanString())
 })
 
 export const updateAddressSchema = createAddressSchema
