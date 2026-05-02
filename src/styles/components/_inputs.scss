@@ -1,11 +1,11 @@
-@use "../base/" as *;
+@use "../base/variables" as *;
 
 $input-height: 2.75rem;
 $input-padding-x: 0.75rem;
 $input-padding-y: 0.4375rem;
 $input-gap: 0.5rem;
-$input-bg: var(--color-surface);
-$input-border: 1px solid transparent;
+$input-bg: var(--color-bg); //var(--color-surface);
+$input-border: 1px solid var(--color-overlay); //1px solid transparent;
 $input-border-radius: $radius-md;
 
 .input {
@@ -20,9 +20,9 @@ $input-border-radius: $radius-md;
         height: $input-height;
         padding: $input-padding-y $input-padding-x;
 
-        &:hover {
-            background-color: var(--color-surface-hover);
-        }
+        // &:hover {
+        //     background-color: var(--color-surface-hover);
+        // }
 
         &:focus {
             border-color: var(--color-primary);
@@ -34,9 +34,9 @@ $input-border-radius: $radius-md;
         padding: $input-padding-y $input-padding-x;
         resize: none;
 
-        &:hover {
-            background-color: var(--color-surface-hover);
-        }
+        // &:hover {
+        //     background-color: var(--color-surface-hover);
+        // }
 
         &:focus {
             border-color: var(--color-primary);
@@ -99,9 +99,9 @@ $input-border-radius: $radius-md;
         transition: background-color 0.3s, border-color 0.3s;
         z-index: 1;
 
-        &:hover {
-            background-color: var(--color-surface-hover);
-        }
+        // &:hover {
+        //     background-color: var(--color-surface-hover);
+        // }
 
         &.custom-select-trigger-open {
             border-color: var(--color-primary);
@@ -182,7 +182,8 @@ $input-border-radius: $radius-md;
                     text-align: start;
 
                     &:hover {
-                        background-color: var(--color-surface-hover);
+                        //background-color: var(--color-surface-hover);
+                        background-color: var(--color-surface);
                     }
                 }
             }

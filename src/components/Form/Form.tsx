@@ -5,7 +5,7 @@ import { formatInitialFileName, toKebabCase } from "@/lib/string"
 import { RequestResponse } from "@/lib/types"
 import { batch, Signal, useSignal } from "@preact/signals-react"
 import { useEffect, useRef } from "react"
-import Button from "../ui/Button"
+import { Button } from "../ui/Button"
 import { FormField, FormGroup } from "./form.types"
 import { FormGroupComponent } from "./FormGroupComponent"
 
@@ -130,7 +130,7 @@ export const Form = ({ title, groups, onSubmit, submitLabel, status }: FormProps
 
     const FormSubmitButton = () => (
         submitLabel && (
-            <Button color="primary" variant="filled" shape="default" className="form-submit-button" type="submit" loading={isSubmitting.value}>
+            <Button color="primary" variant="filled" shape="rectangle" className="form-submit-button" type="submit" loading={isSubmitting.value}>
                 {submitLabel}
             </Button>
         )

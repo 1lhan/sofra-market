@@ -1,5 +1,50 @@
 @use "./variables" as *;
 
+:root {
+    --color-primary: hsl(38, 75%, 48%);
+    --color-primary-hover: hsl(38, 75%, 42%);
+    --color-primary-light: hsl(38, 75%, 94%);
+
+    --color-secondary: hsl(28, 30%, 32%);
+    --color-secondary-hover: hsl(28, 30%, 26%);
+
+    --color-bg: hsl(0, 0%, 99%);
+    --color-surface: hsl(34, 33%, 96%);
+    --color-surface-hover: hsl(42, 20%, 92%);
+    --color-overlay: hsl(42, 15%, 88%);
+
+    --color-bg-dark: hsl(35, 30%, 14%);
+    --color-surface-on-bg-dark: hsl(35, 25%, 20%);
+    --color-surface-on-bg-dark-hover: hsl(35, 25%, 26%);
+
+    --color-border: hsl(40, 15%, 85%);
+
+    --color-text-primary: hsl(25, 18%, 14%);
+    --color-text-muted: hsl(25, 10%, 48%);
+    --color-text-inverse: hsl(0, 0%, 100%);
+    --color-text-inverse-muted: hsl(0, 0%, 78%);
+
+    --color-info: hsl(205, 75%, 48%);
+    --color-info-hover: hsl(205, 75%, 42%);
+    --color-info-light: hsl(205, 65%, 94%);
+    --color-info-light-hover: hsl(205, 65%, 88%);
+
+    --color-success: hsl(140, 45%, 38%);
+    --color-success-hover: hsl(140, 45%, 32%);
+    --color-success-light: hsl(140, 40%, 92%);
+    --color-success-light-hover: hsl(140, 40%, 86%);
+
+    --color-danger: hsl(5, 75%, 52%);
+    --color-danger-hover: hsl(5, 75%, 46%);
+    --color-danger-light: hsl(5, 65%, 94%);
+    --color-danger-light-hover: hsl(5, 65%, 88%);
+
+    --color-warning: hsl(38, 85%, 50%);
+    --color-warning-hover: hsl(38, 85%, 44%);
+    --color-warning-light: hsl(38, 80%, 94%);
+    --color-warning-light-hover: hsl(38, 80%, 88%);
+}
+
 * {
     padding: 0;
     margin: 0;
@@ -16,7 +61,8 @@ a {
     text-decoration: none;
 }
 
-ul {
+ul,
+ol {
     list-style: none;
 }
 
@@ -30,11 +76,6 @@ button {
 input[type=number]::-webkit-inner-spin-button,
 input[type=number]::-webkit-outer-spin-button {
     -webkit-appearance: none;
-}
-
-svg {
-    stroke: currentColor;
-    fill: currentColor;
 }
 
 ::-webkit-scrollbar {

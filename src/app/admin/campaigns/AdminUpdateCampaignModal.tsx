@@ -1,11 +1,11 @@
 "use client"
 
 import { Form } from "@/components/Form/Form"
-import Badge from "@/components/ui/Badge"
-import Icon from "@/components/ui/Icon"
-import Loader from "@/components/ui/Loader"
-import Modal from "@/components/ui/Modal"
-import StatusMessage from "@/components/ui/StatusMessage"
+import { Alert } from "@/components/ui/Alert"
+import { Badge } from "@/components/ui/Badge"
+import { Icon } from "@/components/ui/Icon"
+import { Loader } from "@/components/ui/Loader"
+import { Modal } from "@/components/ui/Modal"
 import { CAMPAIGN_TYPE_OPTIONS, getCampaignTypeSpecificFormGroups } from "@/features/campaign/campaign.helpers"
 import { UpdateCampaignFormInput } from "@/features/campaign/campaign.schema"
 import { formatDateTimeLocal } from "@/lib/date"
@@ -56,13 +56,13 @@ export default function AdminUpdateCampaignModal({ campaignToUpdate, productOpti
         <Modal className="container-lg" onClose={() => batch(() => { formStatus.value = null; campaignToUpdate.value = null })}>
             <div className="modal-header">
                 <Badge color="primary" size="md">
-                    <Icon name="pen" size="lg" />
+                    <Icon name="pen-line" size="lg" />
                 </Badge>
                 <h5>Kampanya Güncelle</h5>
             </div>
 
             {isLoading && <Loader type="progress-bar" />}
-            {error && <StatusMessage color="danger">{error.message}</StatusMessage>}
+            {error && <Alert color="danger">{error.message}</Alert>}
 
             {data && <Form
                 groups={[

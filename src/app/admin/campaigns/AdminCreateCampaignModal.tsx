@@ -1,9 +1,9 @@
 "use client"
 
 import { Form } from "@/components/Form/Form"
-import Badge from "@/components/ui/Badge"
-import Icon from "@/components/ui/Icon"
-import Modal from "@/components/ui/Modal"
+import { Badge } from "@/components/ui/Badge"
+import { Icon } from "@/components/ui/Icon"
+import { Modal } from "@/components/ui/Modal"
 import { CAMPAIGN_TYPE_OPTIONS, getCampaignTypeSpecificFormGroups } from "@/features/campaign/campaign.helpers"
 import { CreateCampaignFormInput } from "@/features/campaign/campaign.schema"
 import { api } from "@/lib/eden"

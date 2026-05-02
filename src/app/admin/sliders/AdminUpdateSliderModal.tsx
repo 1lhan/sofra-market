@@ -1,9 +1,9 @@
 "use client"
 
 import { Form } from "@/components/Form/Form"
-import Badge from "@/components/ui/Badge"
-import Icon from "@/components/ui/Icon"
-import Modal from "@/components/ui/Modal"
+import { Badge } from "@/components/ui/Badge"
+import { Icon } from "@/components/ui/Icon"
+import { Modal } from "@/components/ui/Modal"
 import { UpdateSliderFormInput } from "@/features/slider/slider.schema"
 import { SliderAdminList } from "@/features/slider/slider.types"
 import { api } from "@/lib/eden"
@@ -37,7 +37,7 @@ export default function AdminUpdateSliderModal({ sliderToUpdate }: { sliderToUpd
         <Modal className="container-sm" onClose={() => batch(() => { formStatus.value = null; sliderToUpdate.value = null })}>
             <div className="modal-header">
                 <Badge color="primary" size="md">
-                    <Icon name="pen" size="lg" />
+                    <Icon name="pen-line" size="lg" />
                 </Badge>
                 <h5>Slider Güncelle</h5>
             </div>

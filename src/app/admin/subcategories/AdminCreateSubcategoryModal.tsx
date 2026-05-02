@@ -1,9 +1,9 @@
 "use client"
 
 import { Form } from "@/components/Form/Form"
-import Badge from "@/components/ui/Badge"
-import Icon from "@/components/ui/Icon"
-import Modal from "@/components/ui/Modal"
+import { Badge } from "@/components/ui/Badge"
+import { Icon } from "@/components/ui/Icon"
+import { Modal } from "@/components/ui/Modal"
 import { CreateSubcategoryFormInput } from "@/features/subcategory/subcategory.schema"
 import { api } from "@/lib/eden"
 import { RequestResponse, SelectOption } from "@/lib/types"

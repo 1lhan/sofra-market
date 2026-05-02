@@ -1,9 +1,9 @@
 import Providers from "@/providers/Providers";
 import type { Metadata } from "next";
 import { Work_Sans } from "next/font/google";
-import { Suspense } from "react";
 import "../../styles/main.css";
-import AdminGuard from "./AdminGuard";
+import AdminHeader from "./AdminHeader";
+import AdminSidebar from "./AdminSidebar";
 
 const workSans = Work_Sans({
     variable: "--font-work-sans",
@@ -18,13 +18,17 @@ export default function AdminLayout({ children }: Readonly<{ children: React.Rea
     return (
         <html lang="en">
             <body className={`${workSans.variable}`} style={{ fontFamily: "var(--font-work-sans)" }} suppressHydrationWarning={true}>
-                <Suspense>
-                    <Providers>
-                        <AdminGuard>
-                            {children}
-                        </AdminGuard>
-                    </Providers>
-                </Suspense>
+                <Providers>
+                    <div className="admin-layout">
+                        <AdminSidebar />
+                        <main className="admin-layout-main">
+                            <AdminHeader />
+                            <div className="admin-layout-content">
+                                {children}
+                            </div>
+                        </main>
+                    </div>
+                </Providers>
             </body>
         </html>
     )

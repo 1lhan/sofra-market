@@ -2,9 +2,9 @@
 
 import Pagination from "@/components/Pagination"
 import { Table } from "@/components/Table"
-import Badge from "@/components/ui/Badge"
-import Loader from "@/components/ui/Loader"
-import StatusMessage from "@/components/ui/StatusMessage"
+import { Alert } from "@/components/ui/Alert"
+import { Badge } from "@/components/ui/Badge"
+import { Loader } from "@/components/ui/Loader"
 import { api } from "@/lib/eden"
 import { Signal } from "@preact/signals-react"
 import { useQuery } from "@tanstack/react-query"
@@ -29,9 +29,9 @@ export default function AdminProductsList({ productToUpdate, productToDelete, cu
 
     if (isLoading) return <Loader type="progress-bar" />
 
-    if (!isLoading && error) return <StatusMessage color="danger">{error.message}</StatusMessage>
+    if (!isLoading && error) return <Alert color="danger">{error.message}</Alert>
 
-    if (!products?.data.length) return <StatusMessage color="info">Henüz hiç ürün oluşturulmadı</StatusMessage>
+    if (!products?.data.length) return <Alert color="info">Henüz hiç ürün oluşturulmadı</Alert>
 
     return (
         <>
@@ -46,7 +46,7 @@ export default function AdminProductsList({ productToUpdate, productToDelete, cu
                     { header: "Stok", key: "stock", type: "text" },
                     { header: "Kategori", render: (row) => <span>{row.category.name}</span> },
                     { header: "Alt Kategori", render: (row) => <span>{row.subcategory?.name}</span> },
-                    { header: "Durum", render: (row) => <Badge color={row.isActive ? "success" : "danger"} size="sm" shape="default">{row.isActive ? "Aktif" : "Pasif"}</Badge> },
+                    { header: "Durum", render: (row) => <Badge color={row.isActive ? "success" : "danger"}>{row.isActive ? "Aktif" : "Pasif"}</Badge> },
                     {
                         header: "Action",
                         columns: [

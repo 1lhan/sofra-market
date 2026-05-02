@@ -1,8 +1,8 @@
 "use client"
 
 import { useSignal } from "@preact/signals-react"
-import Button from "./ui/Button"
-import Icon from "./ui/Icon"
+import { Button } from "./ui/Button"
+import { Icon } from "./ui/Icon"
 
 type PaginationProps = {
     currentPage: number

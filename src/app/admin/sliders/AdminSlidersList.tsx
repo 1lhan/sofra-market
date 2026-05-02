@@ -1,9 +1,9 @@
 "use client"
 
 import { Table } from "@/components/Table"
-import Badge from "@/components/ui/Badge"
-import Loader from "@/components/ui/Loader"
-import StatusMessage from "@/components/ui/StatusMessage"
+import { Alert } from "@/components/ui/Alert"
+import { Badge } from "@/components/ui/Badge"
+import { Loader } from "@/components/ui/Loader"
 import { SliderAdminList } from "@/features/slider/slider.types"
 import { api } from "@/lib/eden"
 import { Signal } from "@preact/signals-react"
@@ -28,9 +28,9 @@ export default function AdminSlidersList({ sliderToUpdate, sliderToDelete }: Adm
 
     if (isLoading) return <Loader type="progress-bar" />
 
-    if (!isLoading && error) return <StatusMessage color="danger">{error.message}</StatusMessage>
+    if (!isLoading && error) return <Alert color="danger">{error.message}</Alert>
 
-    if (!sliders?.length) return <StatusMessage color="info">Henüz hiç slider oluşturulmadı</StatusMessage>
+    if (!sliders?.length) return <Alert color="info">Henüz hiç slider oluşturulmadı</Alert>
 
     return (
         <Table
@@ -40,7 +40,7 @@ export default function AdminSlidersList({ sliderToUpdate, sliderToDelete }: Adm
                 { header: "Görsel Açıklaması (Alt)", key: "imageAlt", type: "text" },
                 { header: "Bağlantı URL'i", key: "href", type: "text" },
                 { header: "Sıra", key: "sortOrder", type: "text" },
-                { header: "Durum", render: (row) => <Badge color={row.isActive ? "success" : "danger"} size="sm" shape="default">{row.isActive ? "Aktif" : "Pasif"}</Badge> },
+                { header: "Durum", render: (row) => <Badge color={row.isActive ? "success" : "danger"}>{row.isActive ? "Aktif" : "Pasif"}</Badge> },
                 {
                     header: "Action",
                     columns: [

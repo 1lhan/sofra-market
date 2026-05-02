@@ -2,8 +2,8 @@
 
 import { toKebabCase } from "@/lib/string"
 import { usePathname } from "next/navigation"
-import Button from "./ui/Button"
-import Icon, { IconNames } from "./ui/Icon"
+import { Button } from "./ui/Button"
+import { Icon, IconNames } from "./ui/Icon"
 
 type SidebarMenuLink = {
     label: string
@@ -34,7 +34,7 @@ const SidebarMenuItem = ({ item }: { item: SidebarMenuGroupItem }) => {
                 <Button
                     color="neutral"
                     variant="ghost"
-                    shape="default"
+                    shape="rectangle"
                     className={`sidebar-menu-link${pathname === item.path ? " active" : ""}`}
                     href={item.path}
                     aria-current={pathname === item.path ? "page" : undefined}
@@ -75,7 +75,7 @@ const SidebarMenuItem = ({ item }: { item: SidebarMenuGroupItem }) => {
                         <Button
                             color="neutral"
                             variant="ghost"
-                            shape="default"
+                            shape="rectangle"
                             className={`sidebar-menu-link${pathname === dropdownItem.path ? " active" : ""}`}
                             href={dropdownItem.path}
                             aria-current={pathname === dropdownItem.path ? "page" : undefined}

@@ -103,7 +103,7 @@ export const FormInputComponent = ({ field, groups, values, id, error, groupName
                     {field.options.map((option, optionIndex) =>
                         <Checkbox
                             name={name}
-                            checked={Array.isArray(fieldValue.value) ? fieldValue.value.includes(option.value) : fieldValue.value}
+                            checked={(Array.isArray(fieldValue.value) ? fieldValue.value.includes(option.value) : fieldValue.value) ?? false}
                             onChange={(checked) => {
                                 const updatedValue = Array.isArray(fieldValue.value)
                                     ? (checked ? [...fieldValue.value, option.value] : [...fieldValue.value].filter((v: string) => v !== option.value))

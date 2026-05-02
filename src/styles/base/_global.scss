@@ -151,3 +151,15 @@ h6,
         opacity: 1;
     }
 }
+
+.modal-content {
+    .modal-header {
+        @include flex(row, flex-start, center);
+        margin-bottom: $spacing-md;
+        gap: $spacing-sm;
+
+        .btn-neutral {
+            margin-left: auto;
+        }
+    }
+}

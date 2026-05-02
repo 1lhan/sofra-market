@@ -19,6 +19,7 @@
     "@tinymce/tinymce-react": "^6.3.0",
     "@vercel/blob": "^2.3.1",
     "bcryptjs": "^3.0.3",
+    "better-auth": "^1.6.3",
     "dotenv": "^17.3.1",
     "elysia": "^1.4.28",
     "jose": "^6.2.2",

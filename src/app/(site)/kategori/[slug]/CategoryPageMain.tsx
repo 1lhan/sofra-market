@@ -1,21 +1,19 @@
 "use client"
 
+import { Filters } from "@/components/Filters";
 import { CustomSelect } from "@/components/inputs/CustomSelect";
-import { RatingStars } from "@/components/RatingStars";
-import Button from "@/components/ui/Button";
-import Icon from "@/components/ui/Icon";
+import { PRODUCT_SORT_OPTIONS } from "@/features/product/product.helpers";
 import { ProductPublic } from "@/features/product/product.types";
+import ProductCard from "@/features/product/ProductCard";
 import { api } from "@/lib/eden";
 import { useQuery } from "@tanstack/react-query";
-import Image from "next/image";
-import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import ProductsSkeleton from "./ProductsSkeleton";
 
-export default function CategoryPageMain({ slug, initialProducts }: { slug: string, initialProducts: { total: number, data: ProductPublic[] } }) {
+export default function CategoryPageMain({ slug, subcategories, initialProducts }: { slug: string, subcategories: { name: string, slug: string }[] | undefined, initialProducts: { total: number, data: ProductPublic[] } }) {
     const searchParams = useSearchParams()
 
-    const { data, isLoading, isFetching, error } = useQuery({
+    const { data, isLoading, isFetching } = useQuery({
         queryKey: ["products", slug, searchParams.toString()],
         queryFn: async () => {
             const query = { categorySlug: slug, ...Object.fromEntries(searchParams.entries()) }
@@ -28,73 +26,45 @@ export default function CategoryPageMain({ slug, initialProducts }: { slug: stri
     })
 
     return (
-        <main className="category-page-main">
-            <aside className="filters">
-
-            </aside>
+        <main>
+            <Filters
+                groups={[
+                    ...(
+                        (subcategories?.length && !subcategories?.some(s => s.slug === slug))
+                            ? [{ label: "Alt Kategoriler", key: "subcategory", type: "checkboxes" as const, options: subcategories.map(c => ({ label: c.name, value: c.slug })) }]
+                            : []
+                    ),
+                    { label: "Fiyat", key: "price", type: "range" },
+                    { label: "Diğer", key: "filter", type: "checkboxes", options: [{ label: "İndirimli Ürünler", value: "discounted" }, { label: "Kampanyalı Ürünler", value: "campaign" }] }
+                ]}
+            />
 
             <section className="products-section">
-
                 <div className="products-section-header">
                     {data && <span className="product-count">{`${data.total} Ürün`}</span>}
                     <CustomSelect
                         name="sort"
-                        value={searchParams.get("sort") ?? ""}
+                        value={searchParams.get("sort") ?? "featured"}
                         onChange={(value) => {
                             const params = new URLSearchParams(searchParams.toString())
                             params.set("sort", value as string)
                             window.history.pushState({}, "", `?${params.toString().replaceAll("%2C", ",")}`)
                         }}
-                        options={[
-                            { label: "Öne Çıkanlar", value: "featured" },
-                            { label: "Çok Satılanlar", value: "best_selling" },
-                            { label: "Fiyata Göre (Artan)", value: "price_asc" },
-                            { label: "Fiyata Göre (Azalan)", value: "price_desc" },
-                            { label: "Alfabetik (A-Z)", value: "name_asc" },
-                            { label: "Alfabetik (Z-A)", value: "name_desc" }
-                        ]}
+                        options={PRODUCT_SORT_OPTIONS}
                         buttonProps={{ disabled: !data?.total || isFetching }}
                     />
                 </div>
 
-                {isLoading && <ProductsSkeleton />}
-
-                {!isLoading && data && (
-                    <div className="products">
-                        {data.data.map(({ title, slug, price, comparePrice, images, averageRating, _count }) => {
-                            const discountPct = comparePrice
-                                ? Math.round(((comparePrice - price) / comparePrice) * 100)
-                                : null
-
-                            return (
-                                <div className="product-card" key={slug}>
-                                    <Link className="product-card-image" href={`/urun/${slug}`}>
-                                        {images.length > 0 && <Image src={images[0]} alt={title} fill sizes="(max-width: 768px) 50vw, 25vw" />}
-                                    </Link>
-                                    <Button className="product-card-title" color="neutral" variant="ghost" href={`/urun/${slug}`}>{title}</Button>
-                                    <div className="product-card-reviews-summary">
-                                        <span>{averageRating}</span>
-                                        <RatingStars average={averageRating} id={slug} />
-                                        <span>{`(${_count.reviews})`}</span>
-                                    </div>
-                                    <div className="product-card-footer">
-                                        <div className="product-card-price">
-                                            {discountPct && <span className="product-card-price-discount-pct">{`-%${discountPct}`}</span>}
-                                            <div>
-                                                {comparePrice && <span className="product-card-price-original">{`${comparePrice} ₺`}</span>}
-                                                <span className="product-card-price-current">{`${price} ₺`}</span>
-                                            </div>
-                                        </div>
-                                        <Button color="primary" variant="filled" shape="compact">
-                                            <Icon name="shopping-bag-plus" />
-                                        </Button>
-                                    </div>
-                                </div>
-                            )
-                        })}
-                    </div>
-                )}
-
+                {isLoading
+                    ? <ProductsSkeleton />
+                    : (
+                        <div className="products">
+                            {data?.data.map(item =>
+                                <ProductCard {...item} key={item.id} />
+                            )}
+                        </div>
+                    )
+                }
             </section>
         </main >
     )

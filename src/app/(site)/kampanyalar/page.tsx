@@ -1,4 +1,4 @@
-import Button from "@/components/ui/Button"
+import { Button } from "@/components/ui/Button"
 import { getPublicCampaigns } from "@/features/campaign/campaign.service"
 import { getPublicCoupons } from "@/features/coupon/coupon.service"
 import { cacheLife, cacheTag } from "next/cache"
@@ -35,7 +35,7 @@ export default async function CampaignsPage() {
                         <div className="promo-card-info">
                             <h3>{campaign.title}</h3>
                             <span className="text-muted">{campaign.description}</span>
-                            <Button color="primary" variant="filled" shape="default">Ürünleri İncele</Button>
+                            <Button color="primary" variant="filled" shape="rectangle">Ürünleri İncele</Button>
                         </div>
                     </div>
                 )}

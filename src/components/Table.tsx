@@ -5,8 +5,8 @@ import { SortState } from "@/lib/types"
 import { Signal } from "@preact/signals-react"
 import { useSearchParams } from "next/navigation"
 import { Checkbox } from "./inputs/Checkbox"
-import Button from "./ui/Button"
-import Icon from "./ui/Icon"
+import { Button } from "./ui/Button"
+import { Icon } from "./ui/Icon"
 
 export type TableColumn<T extends Record<string, any>> = {
     header?: string
@@ -106,8 +106,8 @@ const TableSortIcons = <T extends Record<string, any>>({ column, sortConfig }: {
 
     return (
         <div className="table-sort-icons" aria-hidden="true">
-            <Icon name="caret-up" style={{ color: isActive && order === "asc" ? "var(--color-text-primary)" : "" }} />
-            <Icon name="caret-down" style={{ color: isActive && order === "desc" ? "var(--color-text-primary)" : "" }} />
+            {/* <Icon name="caret-up" style={{ color: isActive && order === "asc" ? "var(--color-text-primary)" : "" }} />
+            <Icon name="caret-down" style={{ color: isActive && order === "desc" ? "var(--color-text-primary)" : "" }} /> */}
         </div>
     )
 }
@@ -183,7 +183,7 @@ const TableBodyColumn = <T extends Record<string, any>>({ row, column }: { row: 
                     onClick={() => onAction?.(row)}
                     {...(href ? { href: href(row) } : {})}
                 >
-                    <Icon name="eye" />
+                    <Icon name="pen-line" />
                 </Button>
             )
         case "action:update":
@@ -196,7 +196,7 @@ const TableBodyColumn = <T extends Record<string, any>>({ row, column }: { row: 
                     onClick={() => onAction?.(row)}
                     {...(href ? { href: href(row) } : {})}
                 >
-                    <Icon name="pen" />
+                    <Icon name="pen-line" />
                 </Button>
             )
         case "action:delete":
@@ -209,7 +209,7 @@ const TableBodyColumn = <T extends Record<string, any>>({ row, column }: { row: 
                     onClick={() => onAction?.(row)}
                     {...(href ? { href: href(row) } : {})}
                 >
-                    <Icon name="trash-can" />
+                    <Icon name="trash-alt" />
                 </Button>
             )
     }

@@ -1,28 +1,40 @@
 "use client"
 
 import { Form } from "@/components/Form/Form"
-import { LoginFormInput } from "@/features/auth/auth.schema"
+import { authClient } from "@/lib/auth-client"
 import { api } from "@/lib/eden"
 import { FormStatus } from "@/lib/types"
-import { useAuth } from "@/providers/AuthProvider"
+import { queryClient } from "@/providers/QueryProvider"
 import { useSignal } from "@preact/signals-react"
 import { useRouter } from "next/navigation"
 
 export default function SignInForm() {
     const router = useRouter()
-    const { setUser } = useAuth()
     const formStatus = useSignal<FormStatus>(null)
 
-    const handleLogin = async (formValues: LoginFormInput) => {
-        const { data, error } = await api.auth.login.post(formValues)
+    const handleLogin = async (formValues: any) => {
+        await authClient.signIn.email(formValues, {
+            onSuccess: async (ctx) => {
+                queryClient.setQueryData(["user"], ctx.data.user)
 
-        if (error) {
-            formStatus.value = (error as any).value
-            return
-        }
+                const cartId = localStorage.getItem("cartId")
+                const { data } = await api.carts.get({ query: { cartId } })
+                if (!data) return
 
-        setUser(data.data)
-        router.push("/")
+                queryClient.setQueryData(["cart"], data.data)
+                if (!cartId && data.data) localStorage.setItem("cartId", data.data.id)
+
+                router.push("/")
+            },
+            onError: (ctx) => {
+                formStatus.value = {
+                    success: false,
+                    message: ctx.error.code === "INVALID_EMAIL_OR_PASSWORD"
+                        ? "Geçersiz e-posta ya da şifre"
+                        : "Bir hata oluştu, lütfen daha sonra tekrar deneyin"
+                }
+            }
+        })
     }
 
     return (

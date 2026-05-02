@@ -1,9 +1,9 @@
 "use client"
 
 import { ConfirmModal } from "@/components/common/ConfirmModal"
-import Badge from "@/components/ui/Badge"
-import Button from "@/components/ui/Button"
-import Icon from "@/components/ui/Icon"
+import { Badge } from "@/components/ui/Badge"
+import { Button } from "@/components/ui/Button"
+import { Icon } from "@/components/ui/Icon"
 import { SubcategoryAdminList } from "@/features/subcategory/subcategory.types"
 import { api } from "@/lib/eden"
 import { SelectOption } from "@/lib/types"
@@ -39,7 +39,7 @@ export default function AdminSubcategoriesPageContent({ categoryOptions }: { cat
                     <Icon name="layer-group" size="xl" />
                 </Badge>
                 <h4>Alt Kategoriler</h4>
-                <Button color="primary" variant="filled" shape="default" onClick={() => isCreateModalOpen.value = true}>Alt Kategori Oluştur</Button>
+                <Button color="primary" variant="filled" shape="rectangle" onClick={() => isCreateModalOpen.value = true}>Alt Kategori Oluştur</Button>
             </div>
 
             <AdminSubcategoriesList subcategoryToUpdate={subcategoryToUpdate} subcategoryToDelete={subcategoryToDelete} />

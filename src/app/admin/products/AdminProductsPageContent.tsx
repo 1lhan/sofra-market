@@ -1,9 +1,9 @@
 "use client"
 
 import { ConfirmModal } from "@/components/common/ConfirmModal"
-import Badge from "@/components/ui/Badge"
-import Button from "@/components/ui/Button"
-import Icon from "@/components/ui/Icon"
+import { Badge } from "@/components/ui/Badge"
+import { Button } from "@/components/ui/Button"
+import { Icon } from "@/components/ui/Icon"
 import { CategoryWithSubcategories } from "@/features/category/category.types"
 import { api } from "@/lib/eden"
 import { queryClient } from "@/providers/QueryProvider"
@@ -40,7 +40,7 @@ export default function AdminProductsPageContent({ categoriesWithSubcategories }
                     <Icon name="layer-group" size="xl" />
                 </Badge>
                 <h4>Ürünler</h4>
-                <Button color="primary" variant="filled" shape="default" onClick={() => isCreateModalOpen.value = true}>Ürün Oluştur</Button>
+                <Button color="primary" variant="filled" shape="rectangle" onClick={() => isCreateModalOpen.value = true}>Ürün Oluştur</Button>
             </div>
 
             <AdminProductsList

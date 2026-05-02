@@ -1,11 +1,11 @@
 "use client"
 
 import { Form } from "@/components/Form/Form"
-import Badge from "@/components/ui/Badge"
-import Icon from "@/components/ui/Icon"
-import Loader from "@/components/ui/Loader"
-import Modal from "@/components/ui/Modal"
-import StatusMessage from "@/components/ui/StatusMessage"
+import { Alert } from "@/components/ui/Alert"
+import { Badge } from "@/components/ui/Badge"
+import { Icon } from "@/components/ui/Icon"
+import { Loader } from "@/components/ui/Loader"
+import { Modal } from "@/components/ui/Modal"
 import { DISCOUNT_TYPE_OPTIONS } from "@/features/campaign/campaign.helpers"
 import { UpdateCouponFormInput } from "@/features/coupon/coupon.schema"
 import { formatDateTimeLocal } from "@/lib/date"
@@ -54,13 +54,13 @@ export default function AdminUpdateCouponModal({ couponToUpdate }: { couponToUpd
         <Modal className="container-md" onClose={() => batch(() => { formStatus.value = null; couponToUpdate.value = null })}>
             <div className="modal-header">
                 <Badge color="primary" size="md">
-                    <Icon name="pen" size="lg" />
+                    <Icon name="pen-line" size="lg" />
                 </Badge>
                 <h5>Kupon Güncelle</h5>
             </div>
 
             {isLoading && <Loader type="progress-bar" />}
-            {error && <StatusMessage color="danger">{error.message}</StatusMessage>}
+            {error && <Alert color="danger">{error.message}</Alert>}
 
             {data && <Form
                 groups={[

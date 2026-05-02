@@ -45,13 +45,13 @@ export function getExtensionFromMimeType(mime: string): string | undefined {
 }
 
 const MIME_TYPE_ICON_MAP: Record<string, IconNames> = {
-    "text/plain": "file",
-    "application/msword": "file-word",
-    "application/vnd.openxmlformats-officedocument.wordprocessingml.document": "file-word",
-    "application/pdf": "file-pdf",
-    "application/vnd.ms-excel": "file-excel",
-    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": "file-excel",
-    "text/csv": "file-csv",
+    // "text/plain": "file",
+    // "application/msword": "file-word",
+    // "application/vnd.openxmlformats-officedocument.wordprocessingml.document": "file-word",
+    // "application/pdf": "file-pdf",
+    // "application/vnd.ms-excel": "file-excel",
+    // "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": "file-excel",
+    // "text/csv": "file-csv",
 }
 
 export function getIconNameFromMimeType(mimeType: string) {

@@ -1,7 +1,6 @@
 "use client"
 
-import Button from "@/components/ui/Button"
-import Icon from "@/components/ui/Icon"
+import { Button } from "@/components/ui/Button"
 import { useSignal } from "@preact/signals-react"
 
 export default function AdminHeader() {
@@ -19,7 +18,8 @@ export default function AdminHeader() {
                 variant="ghost"
                 size="lg"
             >
-                <Icon name="angles-left" size="lg" />
+                btn
+                {/* <Icon name="angles-left" size="lg" /> */}
             </Button>
         </header>
     )

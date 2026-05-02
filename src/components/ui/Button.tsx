@@ -1,38 +1,40 @@
-"use client"
-
 import Link from "next/link"
-import Loader from "./Loader"
+import { Loader } from "./Loader"
 
-export type CommonButtonProps = {
+export type ButtonProps = {
     children: React.ReactNode
-    color: "primary" | "secondary" | "neutral" | "muted" | "inverse" | "inverse-muted" | "surface" | "dark-surface"
-    | "info" | "info-light" | "success" | "success-light" | "danger" | "danger-light" | "warning" | "warning-light"
-    variant: "filled" | "outline" | "ghost" | "underline"
+    color: "primary" | "secondary" | "surface" | "neutral" | "muted" | "inverse" | "inverse-muted" | "info" | "info-light" | "success" | "success-light" | "danger" | "danger-light" | "warning" | "warning-light"
+    variant: "filled" | "outline" | "ghost" | "ghost-underline" | "ghost-filled"
+    shape?: "rectangle" | "pill" | "compact" | "circle"
     size?: "sm" | "md" | "lg"
-    shape?: "default" | "circle" | "compact"
-    disabled?: boolean
-    loading?: boolean
-    className?: string
-}
+} & (
+        React.ButtonHTMLAttributes<HTMLButtonElement> & { href?: never, loading?: boolean } |
+        React.AnchorHTMLAttributes<HTMLAnchorElement> & { href: string, loading?: never }
+    )
 
-type ButtonProps = CommonButtonProps & (
-    Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, "className" | "disabled" | "href"> & { href?: never } |
-    Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, "className" | "disabled" | "href"> & { href: string }
-)
-
-export default function Button({ children, color, variant, size = "md", shape, loading, disabled, href, className, ...props }: ButtonProps) {
-    const classNameAttr = `btn btn-${color} btn-${variant} btn-${size}${shape ? ` btn-${shape}` : ""}${loading ? " loading" : ""}${className ? ` ${className}` : ""}`
+export const Button = ({ children, color, variant, shape, size = "md", className, href, loading, ...props }: ButtonProps) => {
+    const cn = `btn btn-${color} btn-${variant}${shape ? ` btn-${shape}` : ""} btn-${size}${className ? ` ${className}` : ""}${loading ? " loading" : ""}`
 
     if (href) {
         return (
-            <Link className={classNameAttr} href={href} aria-disabled={disabled} {...props as React.AnchorHTMLAttributes<HTMLAnchorElement>}>
+            <Link
+                {...props as React.AnchorHTMLAttributes<HTMLAnchorElement>}
+                className={cn}
+                href={href}
+            >
                 {children}
             </Link>
         )
     }
 
     return (
-        <button className={classNameAttr} type="button" disabled={disabled || loading} aria-busy={loading} {...props as React.ButtonHTMLAttributes<HTMLButtonElement>}>
+        <button
+            type="button"
+            {...(props as React.ButtonHTMLAttributes<HTMLButtonElement>)}
+            className={cn}
+            disabled={(props as React.ButtonHTMLAttributes<HTMLButtonElement>).disabled || loading}
+            aria-busy={loading}
+        >
             {children}
             {loading && <Loader type="spinner" />}
         </button>

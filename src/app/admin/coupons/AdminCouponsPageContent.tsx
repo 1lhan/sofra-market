@@ -1,9 +1,9 @@
 "use client"
 
 import { ConfirmModal } from "@/components/common/ConfirmModal"
-import Badge from "@/components/ui/Badge"
-import Button from "@/components/ui/Button"
-import Icon from "@/components/ui/Icon"
+import { Badge } from "@/components/ui/Badge"
+import { Button } from "@/components/ui/Button"
+import { Icon } from "@/components/ui/Icon"
 import { api } from "@/lib/eden"
 import { queryClient } from "@/providers/QueryProvider"
 import { useSignal } from "@preact/signals-react"
@@ -39,7 +39,7 @@ export default function AdminCouponsPageContent() {
                     <Icon name="layer-group" size="xl" />
                 </Badge>
                 <h4>Kuponlar</h4>
-                <Button color="primary" variant="filled" shape="default" onClick={() => isCreateModalOpen.value = true}>Kupon Oluştur</Button>
+                <Button color="primary" variant="filled" shape="rectangle" onClick={() => isCreateModalOpen.value = true}>Kupon Oluştur</Button>
             </div>
 
             <AdminCouponsList

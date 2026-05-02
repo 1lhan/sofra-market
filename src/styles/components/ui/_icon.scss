@@ -1,0 +1,34 @@
+@use "../../base/variables" as *;
+
+[class^="icon-"] {
+    stroke: currentColor;
+    fill: none;
+    stroke-width: 1.75px;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.icon-xs {
+    width: $font-size-xs;
+    height: $font-size-xs;
+}
+
+.icon-sm {
+    width: $font-size-sm;
+    height: $font-size-sm;
+}
+
+.icon-md {
+    width: $font-size-base;
+    height: $font-size-base;
+}
+
+.icon-lg {
+    width: $font-size-lg;
+    height: $font-size-lg;
+}
+
+.icon-xl {
+    width: $font-size-xl;
+    height: $font-size-xl;
+}

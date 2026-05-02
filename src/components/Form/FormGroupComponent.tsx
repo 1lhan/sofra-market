@@ -2,8 +2,8 @@
 
 import { RequestResponse } from "@/lib/types"
 import { ReadonlySignal, Signal, useComputed } from "@preact/signals-react"
-import Button from "../ui/Button"
-import Icon from "../ui/Icon"
+import { Button } from "../ui/Button"
+import { Icon } from "../ui/Icon"
 import { getDefaultFieldValue } from "./Form"
 import { FormGroup } from "./form.types"
 import { FormFieldComponent } from "./FormFieldComponent"
@@ -98,7 +98,7 @@ const AddRowButton = ({ group, values, rowCount }: FormGroupComponentProps & { r
     if (!canAddRow) return null
 
     return (
-        <Button color="info" variant="outline" size="sm" shape="default" onClick={() => addRepeatableGroupRow(group, values)}>
+        <Button color="info" variant="outline" size="sm" shape="compact" onClick={() => addRepeatableGroupRow(group, values)}>
             Add Row
         </Button>
     )

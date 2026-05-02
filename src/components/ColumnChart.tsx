@@ -4,7 +4,7 @@ import { computeYAxisTicks } from "@/lib/chart-utils"
 import { camelCaseToSentenceCase } from "@/lib/string"
 import { Signal, useSignal } from "@preact/signals-react"
 import React from "react"
-import Tooltip from "./ui/Tooltip"
+import { Tooltip } from "./ui/Tooltip"
 
 type ColumnChartProps<T extends Record<string, any>> = {
     data: T[]

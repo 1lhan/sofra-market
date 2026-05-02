@@ -1,0 +1,33 @@
+@use "../../base/variables" as *;
+
+.tooltip {
+    position: absolute;
+    position-try-fallbacks: flip-block, flip-inline, flip-block flip-inline;
+    padding: $spacing-sm;
+    background-color: var(--color-bg-dark);
+    border-radius: $radius-md;
+    font-size: $font-size-sm;
+    color: var(--color-text-inverse);
+    white-space: nowrap;
+    z-index: 2;
+
+    &-top {
+        margin-bottom: 0.25rem;
+        position-area: top;
+    }
+
+    &-right {
+        margin-left: 0.25rem;
+        position-area: right;
+    }
+
+    &-bottom {
+        margin-top: 0.25rem;
+        position-area: bottom;
+    }
+
+    &-left {
+        margin-right: 0.25rem;
+        position-area: left;
+    }
+}

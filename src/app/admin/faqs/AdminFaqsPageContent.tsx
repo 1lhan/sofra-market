@@ -1,9 +1,9 @@
 "use client"
 
 import { ConfirmModal } from "@/components/common/ConfirmModal"
-import Badge from "@/components/ui/Badge"
-import Button from "@/components/ui/Button"
-import Icon from "@/components/ui/Icon"
+import { Badge } from "@/components/ui/Badge"
+import { Button } from "@/components/ui/Button"
+import { Icon } from "@/components/ui/Icon"
 import { FaqAdminList } from "@/features/faq/faq.types"
 import { api } from "@/lib/eden"
 import { queryClient } from "@/providers/QueryProvider"
@@ -38,7 +38,7 @@ export default function AdminFaqsPageContent() {
                     <Icon name="layer-group" size="xl" />
                 </Badge>
                 <h4>Sıkça Sorulan Sorular</h4>
-                <Button color="primary" variant="filled" shape="default" onClick={() => isCreateModalOpen.value = true}>S.S.S Oluştur</Button>
+                <Button color="primary" variant="filled" shape="rectangle" onClick={() => isCreateModalOpen.value = true}>S.S.S Oluştur</Button>
             </div>
 
             <AdminFaqsList faqToUpdate={faqToUpdate} faqToDelete={faqToDelete} />

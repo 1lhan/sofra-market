@@ -1,0 +1,60 @@
+@use "../../base/variables" as *;
+
+.toast-container {
+    position: fixed;
+    top: $spacing-md;
+    right: $spacing-md;
+    @include flex(column, flex-start, stretch);
+    gap: $spacing-sm;
+    width: 20rem;
+    z-index: 101;
+
+    .toast {
+        @include flex(column, flex-start, stretch);
+        gap: 0.25rem;
+        padding: 0.75rem;
+        border-radius: $radius-lg;
+        animation: modal-slide-in-right 0.3s ease-out forwards;
+
+        &-info {
+            background-color: var(--color-info-light);
+            color: var(--color-info);
+        }
+
+        &-success {
+            background-color: var(--color-success-light);
+            color: var(--color-success);
+        }
+
+        &-danger {
+            background-color: var(--color-danger-light);
+            color: var(--color-danger);
+        }
+
+        &-warning {
+            background-color: var(--color-warning-light);
+            color: var(--color-warning);
+        }
+
+        &-header {
+            @include flex(row, flex-start, center);
+            gap: $spacing-sm;
+
+            .toast-title {
+                flex: 1;
+                font-size: $font-size-base;
+                font-weight: 600;
+            }
+        }
+
+        &-description {
+            margin-left: calc($font-size-sm + $spacing-sm);
+            font-size: $font-size-sm;
+            opacity: 0.9;
+        }
+
+        &-action {
+            margin-left: auto;
+        }
+    }
+}

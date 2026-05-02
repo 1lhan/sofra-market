@@ -16,7 +16,7 @@ function replaceTempIds(content: string, imageUrls: string[]): string {
     )
 }
 
-export async function prepareEditorContentForCreate(content: string, images: File[] | undefined): Promise<{ processedContent: string, contentImageUrls: string[] }> {
+export async function prepareEditorContentForCreate(content: string, images: File[] | undefined) {
     if (!images?.length) return { processedContent: content, contentImageUrls: [] }
 
     const imageUrls = await saveFiles(images)
@@ -24,7 +24,7 @@ export async function prepareEditorContentForCreate(content: string, images: Fil
     return { processedContent: replaceTempIds(content, imageUrls), contentImageUrls: imageUrls }
 }
 
-export async function prepareEditorContentForUpdate(oldContent: string, newContent: string, images: File[] | undefined): Promise<{ processedContent: string, contentImageUrls: string[], contentImageUrlsToDelete: string[] }> {
+export async function prepareEditorContentForUpdate(oldContent: string, newContent: string, images: File[] | undefined) {
     const imageUrls = await saveFiles(images ?? [])
     const processedContent = replaceTempIds(newContent, imageUrls)
 
@@ -35,6 +35,6 @@ export async function prepareEditorContentForUpdate(oldContent: string, newConte
     return { processedContent, contentImageUrls: imageUrls, contentImageUrlsToDelete: imageUrlsToDelete }
 }
 
-export async function deleteEditorContentImages(content: string): Promise<void> {
+export async function deleteEditorContentImages(content: string) {
     await deleteFiles(extractImageUrls(content))
 }

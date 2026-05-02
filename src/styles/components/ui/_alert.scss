@@ -1,0 +1,31 @@
+@use "../../base/variables" as *;
+
+.alert {
+    @include flex(row, flex-start, center);
+    gap: $spacing-sm;
+    width: 100%;
+    padding: 0.75rem;
+    border-radius: $radius-lg;
+    font-size: $font-size-sm;
+    font-weight: 500;
+
+    &-info {
+        background-color: var(--color-info-light);
+        color: var(--color-info);
+    }
+
+    &-success {
+        background-color: var(--color-success-light);
+        color: var(--color-success);
+    }
+
+    &-danger {
+        background-color: var(--color-danger-light);
+        color: var(--color-danger);
+    }
+
+    &-warning {
+        background-color: var(--color-warning-light);
+        color: var(--color-warning);
+    }
+}

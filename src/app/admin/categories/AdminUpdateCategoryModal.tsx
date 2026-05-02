@@ -1,9 +1,9 @@
 "use client"
 
 import { Form } from "@/components/Form/Form"
-import Badge from "@/components/ui/Badge"
-import Icon from "@/components/ui/Icon"
-import Modal from "@/components/ui/Modal"
+import { Badge } from "@/components/ui/Badge"
+import { Icon } from "@/components/ui/Icon"
+import { Modal } from "@/components/ui/Modal"
 import { UpdateCategoryFormInput } from "@/features/category/category.schema"
 import { CategoryAdminList } from "@/features/category/category.types"
 import { api } from "@/lib/eden"
@@ -37,7 +37,7 @@ export default function AdminUpdateCategoryModal({ categoryToUpdate }: { categor
         <Modal className="container-sm" onClose={() => batch(() => { formStatus.value = null; categoryToUpdate.value = null })}>
             <div className="modal-header">
                 <Badge color="primary" size="md">
-                    <Icon name="pen" size="lg" />
+                    <Icon name="pen-line" size="lg" />
                 </Badge>
                 <h5>Kategori Güncelle</h5>
             </div>

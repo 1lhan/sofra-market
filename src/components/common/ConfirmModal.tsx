@@ -1,19 +1,19 @@
 "use client"
 
 import { Signal } from "@preact/signals-react"
-import Badge, { BadgeProps } from "../ui/Badge"
-import Button, { CommonButtonProps } from "../ui/Button"
-import Icon, { IconNames } from "../ui/Icon"
-import Modal from "../ui/Modal"
+import { Badge } from "../ui/Badge"
+import { Button } from "../ui/Button"
+import { Icon, IconNames } from "../ui/Icon"
+import { Modal } from "../ui/Modal"
 
 type ConfirmModalProps = {
     isOpen: Signal<string | boolean | number | null>,
     title?: string
     message: string
     icon?: IconNames
-    badgeColor?: BadgeProps["color"]
+    badgeColor?: "primary" | "info" | "success" | "danger" | "warning"
     confirmButtonText?: string
-    confirmButtonColor?: CommonButtonProps["color"]
+    confirmButtonColor?: any
     isLoading?: Signal<boolean>
     onConfirm: () => void
     onCancel: () => void
@@ -23,7 +23,7 @@ export const ConfirmModal = ({
     isOpen,
     title = "Onayla",
     message,
-    icon = "trash-can",
+    icon = "trash-alt",
     badgeColor = "danger",
     confirmButtonText = "Sil",
     confirmButtonColor = "danger",
@@ -48,7 +48,7 @@ export const ConfirmModal = ({
                 <Button
                     color="secondary"
                     variant="outline"
-                    shape="default"
+                    shape="rectangle"
                     onClick={onCancel}
                 >
                     Vazgeç
@@ -56,7 +56,7 @@ export const ConfirmModal = ({
                 <Button
                     color={confirmButtonColor}
                     variant="filled"
-                    shape="default"
+                    shape="rectangle"
                     loading={isLoading?.value ?? false}
                     onClick={onConfirm}
                 >

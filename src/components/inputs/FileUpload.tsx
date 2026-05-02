@@ -3,8 +3,8 @@
 import { getIconNameFromMimeType, getMimeTypeFromExtension } from "@/lib/files"
 import { ReadonlySignal, Signal } from "@preact/signals-react"
 import Image from "next/image"
-import Button from "../ui/Button"
-import Icon from "../ui/Icon"
+import { Button } from "../ui/Button"
+import { Icon } from "../ui/Icon"
 
 type FileUploadConfig = {
     mimeTypes: string[]
@@ -154,7 +154,7 @@ export const FileUpload = ({ id, name, files, initialFiles, config, onChange, cl
                 onDrop={handleDrop}
                 {...labelProps}
             >
-                <Icon name="file-arrow-up" size="xl" />
+                {/* <Icon name="file-arrow-up" size="xl" /> */}
                 <span className="file-upload-prompt">
                     {`Drag and drop file${allowMultiple ? "s" : ""} here or `}
                     <strong>browse</strong>

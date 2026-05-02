@@ -1,15 +1,30 @@
+@use "./base/base";
+@use "./base/global";
+
+@use "./components/ui/alert";
+@use "./components/ui/badge";
 @use "./components/ui/button";
-@use "./components/ui/ui";
-@use "./components/common";
+@use "./components/ui/icon";
+@use "./components/ui/loader";
+@use "./components/ui/modal";
+@use "./components/ui/toast-container";
+@use "./components/ui/tooltip";
+
 @use "./components/column-chart";
+@use "./components/common";
 @use "./components/components";
 @use "./components/form";
 @use "./components/header";
 @use "./components/inputs";
 @use "./components/line-chart";
+@use "./components/semi-donut-chart";
 @use "./components/sidebar-menu";
 @use "./components/table";
 @use "./pages/admin";
 @use "./pages/auth";
+@use "./pages/checkout";
 @use "./pages/home";
 @use "./pages/pages";
+@use "./pages/my-account";
+@use "./cart";
+@use "./product";

@@ -1,4 +1,4 @@
-import { formatNumber, formatPercentShare } from "@/lib/number"
+import { formatNumber /*, formatPercentShare*/ } from "@/lib/number"
 import { useSignal } from "@preact/signals-react"
 import { useEffect, useRef } from "react"
 
@@ -101,7 +101,7 @@ export default function SemiDonutChart<T extends Record<string, any>>({ data, va
                     <li className="semi-donut-chart-legend-item" key={index}>
                         <i className={`semi-donut-chart-legend-item-dot semi-donut-chart-color-${index + 1}`} />
                         <span className="semi-donut-chart-legend-item-label">{item[labelKey]}</span>
-                        <span className="semi-donut-chart-legend-item-value">{`${formatNumber(item[valueKey])} • ${formatPercentShare(+item[valueKey], summaryValue.value)}`}</span>
+                        <span className="semi-donut-chart-legend-item-value">{`${formatNumber(item[valueKey])} • ${/*formatPercentShare(+item[valueKey], summaryValue.value)*/null}`}</span>
                     </li>
                 )}
             </ul>

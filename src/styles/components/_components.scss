@@ -1,4 +1,4 @@
-@use "../base/" as *;
+@use "../base/variables" as *;
 
 .pagination {
     @include flex(row, flex-end, center);
@@ -27,9 +27,18 @@
 }
 
 .breadcrumb {
-    @include flex(row, flex-start, center);
-    gap: $spacing-sm;
-    font-size: $font-size-sm;
+    ol {
+        @include flex(row, flex-start, center);
+        flex-wrap: wrap;
+        gap: $spacing-sm;
+        font-size: $font-size-sm;
+
+        li {
+            @include flex(row, center, center);
+            gap: $spacing-sm;
+            white-space: nowrap;
+        }
+    }
 }
 
 .rating-stars {
@@ -45,6 +54,70 @@
 
         stop:last-child {
             stop-color: var(--color-border);
+        }
+    }
+}
+
+.filters {
+    @include flex(column, flex-start, stretch);
+    flex: 0 0 15rem;
+    gap: $spacing-lg;
+
+    .filter-group {
+        &-toggle {
+            display: none;
+
+            &:not(:checked) {
+                +.filter-group-header {
+                    .icon-chevron-down {
+                        transform: rotate(180deg);
+                    }
+                }
+
+                ~.filter-group-body {
+                    height: 0 !important;
+                }
+            }
+        }
+
+        &-header {
+            @include flex(row, space-between, center);
+            cursor: pointer;
+
+            .filter-group-label {
+                font-weight: 500;
+            }
+
+            .icon-chevron-down {
+                transition: transform 0.3s;
+            }
+        }
+
+        &-body {
+            @include flex(column, flex-start, stretch);
+            padding-top: $spacing-sm;
+            font-size: $font-size-sm;
+            overflow: hidden;
+            transition: height 0.3s;
+
+            .checkbox-wrapper {
+                min-height: 1.5rem;
+                justify-content: flex-start;
+
+                .input-checkbox {
+                    width: $font-size-sm;
+                    height: $font-size-sm;
+                }
+            }
+
+            .filter-range {
+                @include flex(row, space-between, center);
+                gap: $spacing-sm;
+
+                .input-field {
+                    width: 50%;
+                }
+            }
         }
     }
 }

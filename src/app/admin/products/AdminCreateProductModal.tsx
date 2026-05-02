@@ -1,9 +1,9 @@
 "use client"
 
 import { Form } from "@/components/Form/Form"
-import Badge from "@/components/ui/Badge"
-import Icon from "@/components/ui/Icon"
-import Modal from "@/components/ui/Modal"
+import { Badge } from "@/components/ui/Badge"
+import { Icon } from "@/components/ui/Icon"
+import { Modal } from "@/components/ui/Modal"
 import { CategoryWithSubcategories } from "@/features/category/category.types"
 import { CreateProductFormInput } from "@/features/product/product.schema"
 import { api } from "@/lib/eden"
@@ -16,7 +16,7 @@ export default function AdminCreateProductModal({ isCreateModalOpen, categoriesW
     const formStatus = useSignal<RequestResponse | null>(null)
 
     const handleCreateProduct = async (formValues: CreateProductFormInput) => {
-        const { error } = await api.admin.products.post(formValues)
+        const { data, error } = await api.admin.products.post(formValues)
 
         if (error) {
             formStatus.value = (error as any).value

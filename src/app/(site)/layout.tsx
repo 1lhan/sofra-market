@@ -1,7 +1,8 @@
+import { ToastContainer } from "@/components/ui/ToastContainer";
+import CartDrawer from "@/features/cart/CartDrawer";
 import Providers from "@/providers/Providers";
 import type { Metadata } from "next";
 import { Jost } from "next/font/google";
-import { Suspense } from "react";
 import "../../styles/main.css";
 import Header from "./(header)/Header";
 import HeaderNav from "./(header)/HeaderNav";
@@ -21,14 +22,14 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
     return (
         <html lang="en">
             <body className={`${jost.variable}`} style={{ fontFamily: "var(--font-jost)" }} suppressHydrationWarning={true}>
-                <Suspense>
-                    <Providers>
-                        <SiteTopBar />
-                        <Header />
-                        <HeaderNav />
-                        {children}
-                    </Providers>
-                </Suspense>
+                <Providers>
+                    <SiteTopBar />
+                    <Header />
+                    <HeaderNav />
+                    {children}
+                    <CartDrawer />
+                    <ToastContainer />
+                </Providers>
             </body>
         </html>
     )

@@ -1,33 +1,50 @@
 "use client"
 
-import { useActiveModals } from "@/providers/ActiveModalsProvider"
+import { signal } from "@preact-signals/safe-react"
 import { useEffect } from "react"
 
-export default function Modal({ children, className, onClose }: { children: React.ReactNode, className: string, onClose: () => void }) {
-    const { activeModals, setActiveModals } = useActiveModals()
-    const isTopModal = activeModals[activeModals.length - 1] === className
+type ModalProps = {
+    children: React.ReactNode
+    className: string
+    direction?: "center" | "right" | "left"
+    onClose: () => void
+}
+
+const modalStack = signal<string[]>([])
+
+function pushModal(className: string) {
+    if (modalStack.value.length === 0) document.body.style.overflow = "hidden"
+    modalStack.value = [...modalStack.value, className]
+}
+
+function popModal() {
+    modalStack.value = modalStack.value.slice(0, -1)
+    if (modalStack.value.length === 0) document.body.style.overflow = "auto"
+}
+
+function isTopModal(className: string) {
+    return modalStack.value[modalStack.value.length - 1] === className
+}
+
+export const Modal = ({ children, className, direction = "center", onClose }: ModalProps) => {
+    const handleModalClose = () => {
+        if (isTopModal(className)) {
+            popModal()
+            onClose()
+        }
+    }
 
     useEffect(() => {
-        setActiveModals([...activeModals, ...(activeModals.includes(className) ? [] : [className])])
-
-        const handleEscape = (e: KeyboardEvent) => {
-            if (e.key === "Escape" && isTopModal) onClose()
-        }
-
+        pushModal(className)
+        const handleEscape = (e: KeyboardEvent) => { if (e.key === "Escape") handleModalClose() }
         document.addEventListener("keydown", handleEscape)
-
-        return () => {
-            setActiveModals(activeModals.filter((c) => c !== className))
-            document.removeEventListener("keydown", handleEscape)
-        }
-    }, [isTopModal])
+        return () => document.removeEventListener("keydown", handleEscape)
+    }, [])
 
     return (
-        <div className="modal-backdrop" onClick={() => isTopModal && onClose()}>
-            <div className="modal-container">
-                <div className={`modal${className ? ` ${className}` : ""}`} onClick={(e) => e.stopPropagation()}>
-                    {children}
-                </div>
+        <div className="modal-backdrop" onClick={handleModalClose}>
+            <div className={`modal-content modal-${direction}${className ? ` ${className}` : ""}`} onClick={e => e.stopPropagation()}>
+                {children}
             </div>
         </div>
     )

@@ -1,9 +1,9 @@
 "use client"
 
 import { ConfirmModal } from "@/components/common/ConfirmModal"
-import Badge from "@/components/ui/Badge"
-import Button from "@/components/ui/Button"
-import Icon from "@/components/ui/Icon"
+import { Badge } from "@/components/ui/Badge"
+import { Button } from "@/components/ui/Button"
+import { Icon } from "@/components/ui/Icon"
 import { CategoryAdminList } from "@/features/category/category.types"
 import { api } from "@/lib/eden"
 import { queryClient } from "@/providers/QueryProvider"
@@ -38,7 +38,7 @@ export default function AdminCategoriesPageContent() {
                     <Icon name="layer-group" size="xl" />
                 </Badge>
                 <h4>Kategoriler</h4>
-                <Button color="primary" variant="filled" shape="default" onClick={() => isCreateModalOpen.value = true}>Kategori Oluştur</Button>
+                <Button color="primary" variant="filled" shape="rectangle" onClick={() => isCreateModalOpen.value = true}>Kategori Oluştur</Button>
             </div>
 
             <AdminCategoriesList categoryToUpdate={categoryToUpdate} categoryToDelete={categoryToDelete} />

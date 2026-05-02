@@ -10,7 +10,7 @@ export async function ProductReviewsSummary({ slug }: { slug: string }) {
         where: { slug },
         select: {
             averageRating: true,
-            _count: { select: { reviews: true } }
+            _count: { select: { reviews: { where: { status: "APPROVED" } } } }
         }
     })
 
@@ -21,9 +21,9 @@ export async function ProductReviewsSummary({ slug }: { slug: string }) {
 
     return (
         <div className="product-reviews-summary">
-            <span className="product-average-rating">{average}</span>
+            <span>{average.toFixed(1)}</span>
             <RatingStars average={average} id="product" />
-            <span className="product-reviews-count">{`${count} değerlendirme`}</span>
+            <span>{count} değerlendirme</span>
         </div>
     )
 }

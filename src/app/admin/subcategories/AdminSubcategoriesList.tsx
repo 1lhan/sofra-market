@@ -1,8 +1,8 @@
 "use client"
 
 import { Table } from "@/components/Table"
-import Loader from "@/components/ui/Loader"
-import StatusMessage from "@/components/ui/StatusMessage"
+import { Alert } from "@/components/ui/Alert"
+import { Loader } from "@/components/ui/Loader"
 import { SubcategoryAdminList } from "@/features/subcategory/subcategory.types"
 import { api } from "@/lib/eden"
 import { Signal } from "@preact/signals-react"
@@ -26,9 +26,9 @@ export default function AdminSubcategoriesList({ subcategoryToUpdate, subcategor
 
     if (isLoading) return <Loader type="progress-bar" />
 
-    if (!isLoading && error) return <StatusMessage color="danger">{error.message}</StatusMessage>
+    if (!isLoading && error) return <Alert color="danger">{error.message}</Alert>
 
-    if (!subcategories?.length) return <StatusMessage color="info">Henüz hiç alt kategori oluşturulmadı</StatusMessage>
+    if (!subcategories?.length) return <Alert color="info">Henüz hiç alt kategori oluşturulmadı</Alert>
 
     return (
         <Table

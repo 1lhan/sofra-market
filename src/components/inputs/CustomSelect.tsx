@@ -2,7 +2,7 @@
 
 import { useComputed, useSignal } from "@preact/signals-react"
 import { useEffect, useRef } from "react"
-import Icon from "../ui/Icon"
+import { Icon } from "../ui/Icon"
 import { Checkbox } from "./Checkbox"
 import { Input } from "./Input"
 
@@ -75,7 +75,7 @@ export const CustomSelect = ({ name, value, onChange, options, placeholder, sear
                             onChange={(v) => filterText.value = v}
                             type="search"
                         />
-                        <Icon name="magnifying-glass" />
+                        <Icon name="search-alt-1" />
                     </div>
                 }
                 <ul className="custom-select-options" role="listbox" ref={listRef}>

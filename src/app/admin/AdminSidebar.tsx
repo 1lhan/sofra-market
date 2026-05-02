@@ -9,7 +9,7 @@ const sidebarMenuGroups: SidebarMenuGroup[] = [
         items: [
             {
                 label: "Katalog",
-                icon: "book-open",
+                //icon: "book-open",
                 items: [
                     { label: "Kategoriler", path: "/admin/categories" },
                     { label: "Alt Kategoriler", path: "/admin/subcategories" },

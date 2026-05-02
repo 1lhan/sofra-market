@@ -1,10 +1,11 @@
+import { Breadcrumb } from "@/components/Breadcrumb"
 import { getCategoryBySlug } from "@/features/category/category.service"
 import { getPublicProducts } from "@/features/product/product.service"
 import { prisma } from "@/lib/prisma"
 import { Metadata } from "next"
 import { cacheLife, cacheTag } from "next/cache"
 import { notFound } from "next/navigation"
-import Breadcrumb from "../../Breadcrumb"
+import { Suspense } from "react"
 import CategoryPageMain from "./CategoryPageMain"
 
 export async function generateStaticParams() {
@@ -69,10 +70,14 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
     return (
         <div className="category-page container">
             <Breadcrumb
-                category={{ label: category.name, slug: category.slug }}
-                subcategory={subcategory ? { label: subcategory.name, slug: subcategory.slug } : undefined}
+                items={[
+                    { label: category.name, url: `/kategori/${category.slug}` },
+                    ...(subcategory ? [{ label: subcategory.name, url: `/kategori/${subcategory.slug}` }] : [])
+                ]}
             />
-            <CategoryPageMain slug={slug} initialProducts={initialProducts} />
+            <Suspense>
+                <CategoryPageMain slug={slug} subcategories={category.subcategories} initialProducts={initialProducts} />
+            </Suspense>
         </div>
     )
 }

@@ -1,0 +1,209 @@
+@use "./base/variables" as *;
+
+.cart-page {
+    @include flex(row, flex-start, flex-start);
+    flex-wrap: wrap;
+    gap: $spacing-lg;
+    padding-top: $spacing-md;
+    padding-bottom: $spacing-md;
+
+    &-header {
+        @include flex(row, space-between, center);
+        width: 100%;
+    }
+
+    .cart-items {
+        flex: 7;
+    }
+
+    .order-summary {
+        @include flex(column, flex-start, stretch);
+        flex: 3;
+        gap: 0.75rem;
+        padding: $spacing-lg;
+        background-color: var(--color-surface);
+        border-radius: $radius-lg;
+
+        h5 {
+            margin-bottom: $spacing-sm;
+            font-weight: 500;
+        }
+
+        &-row {
+            @include flex(row, space-between, center);
+            gap: $spacing-md;
+            font-size: $font-size-sm;
+
+            &.order-summary-row-discount {
+                color: var(--color-primary);
+            }
+
+            &.order-summary-row-total {
+                padding-top: $spacing-sm;
+                border-top: 1px solid var(--color-overlay);
+                font-size: $font-size-lg;
+                font-weight: 600;
+
+                span:nth-of-type(2) {
+                    font-weight: 600;
+                }
+            }
+
+            span:nth-of-type(2) {
+                font-weight: 500;
+                white-space: nowrap;
+            }
+        }
+
+        .coupon {
+            @include flex(row, flex-start, center);
+            flex-wrap: wrap;
+            gap: $spacing-md;
+
+            .input-field {
+                flex: 1;
+            }
+        }
+    }
+}
+
+.cart-drawer {
+    @include flex(column, flex-start, stretch);
+    width: 30rem;
+    gap: $spacing-lg;
+
+    &-header {
+        @include flex(row, space-between, center);
+    }
+
+    &-items {
+        @include flex(column, flex-start, stretch);
+        padding-right: $spacing-sm;
+        overflow-y: auto;
+    }
+
+    &-footer {
+        @include flex(row, flex-start, flex-start);
+        flex-wrap: wrap;
+        margin-top: auto;
+        gap: 0 $spacing-md;
+
+        &-row {
+            @include flex(row, space-between, center);
+            width: 100%;
+            padding: 0.75rem 0;
+
+            &:nth-last-of-type(1) {
+                font-size: $font-size-lg;
+                font-weight: 600;
+            }
+
+            &:not(:nth-last-of-type(1)) {
+                border-bottom: 1px solid var(--color-border);
+            }
+
+            span:nth-of-type(2) {
+                margin-left: auto;
+                font-weight: 500;
+            }
+        }
+
+        .btn-primary {
+            width: calc(50% - $spacing-sm);
+        }
+    }
+
+    &-empty {
+        @include flex(column, center, center);
+        margin: auto 0;
+        gap: $spacing-md;
+    }
+}
+
+.cart-item {
+    @include flex(row, flex-start, stretch);
+    padding: $spacing-md 0;
+    gap: $spacing-sm;
+
+    &:not(:nth-last-of-type(1)) {
+        border-bottom: 1px solid var(--color-border);
+    }
+
+    &-image-wrapper {
+        width: 96px;
+        height: 96px;
+    }
+
+    &-info {
+        @include flex(column, flex-start, flex-start);
+        gap: $spacing-sm;
+
+        .cart-item-prices {
+            .cart-item-price {
+                font-weight: 500;
+            }
+
+            .cart-item-compare-price {
+                margin-left: $spacing-sm;
+                font-size: $font-size-sm;
+                text-decoration: line-through;
+            }
+        }
+
+        .cart-item-quantity {
+            @include flex(row, flex-start, center);
+            gap: $spacing-sm;
+
+            span {
+                font-size: $font-size-xs;
+            }
+
+            &-stepper {
+                @include flex(row, center, stretch);
+                height: 2.25rem;
+                border-radius: $radius-2xl;
+                overflow: hidden;
+
+                .btn-surface {
+                    border-radius: 0;
+                }
+
+                .input-field {
+                    width: 3rem;
+                    height: 2.25rem;
+                    background-color: var(--color-surface);
+                    border-color: transparent;
+                    border-radius: 0;
+                    text-align: center;
+
+                    &:focus {
+                        border-color: var(--color-primary);
+                    }
+                }
+            }
+        }
+
+        .cart-item-applied-campaign {
+            font-size: $font-size-xs;
+            color: var(--color-primary);
+        }
+    }
+
+    &-actions {
+        @include flex(column, flex-start, flex-end);
+        margin-left: auto;
+
+        .cart-item-total-price {
+            font-size: $font-size-sm;
+            text-decoration: line-through;
+        }
+
+        .cart-item-final-price {
+            font-weight: 500;
+        }
+
+        .btn-neutral {
+            margin-top: auto;
+        }
+    }
+}

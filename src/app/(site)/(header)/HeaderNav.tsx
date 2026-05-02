@@ -1,5 +1,5 @@
-import Button from "@/components/ui/Button";
-import Icon from "@/components/ui/Icon";
+import { Button } from "@/components/ui/Button";
+import { Icon } from "@/components/ui/Icon";
 import { prisma } from "@/lib/prisma";
 import { cacheLife, cacheTag } from "next/cache";
 import { Fragment } from "react/jsx-runtime";
@@ -24,6 +24,10 @@ export default async function HeaderNav() {
     return (
         <nav className="header-nav">
             <div className="container">
+                <Button color="neutral" variant="ghost" shape="compact" href="/tum-urunler">
+                    Tüm Ürünler
+                </Button>
+
                 {categories.map(({ name, slug, subcategories }) => {
                     const hasSubcategories = subcategories.length > 0
 

@@ -1,8 +1,8 @@
 "use client"
 
 import { Table } from "@/components/Table"
-import Loader from "@/components/ui/Loader"
-import StatusMessage from "@/components/ui/StatusMessage"
+import { Alert } from "@/components/ui/Alert"
+import { Loader } from "@/components/ui/Loader"
 import { CategoryAdminList } from "@/features/category/category.types"
 import { api } from "@/lib/eden"
 import { Signal } from "@preact/signals-react"
@@ -25,9 +25,9 @@ export default function AdminCategoriesList({ categoryToUpdate, categoryToDelete
 
     if (isLoading) return <Loader type="progress-bar" />
 
-    if (!isLoading && error) return <StatusMessage color="danger">{error.message}</StatusMessage>
+    if (!isLoading && error) return <Alert color="danger">{error.message}</Alert>
 
-    if (!categories?.length) return <StatusMessage color="info">Henüz hiç kategori oluşturulmadı</StatusMessage>
+    if (!categories?.length) return <Alert color="info">Henüz hiç kategori oluşturulmadı</Alert>
 
     return (
         <Table

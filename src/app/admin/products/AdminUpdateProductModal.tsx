@@ -1,11 +1,11 @@
 "use client"
 
 import { Form } from "@/components/Form/Form"
-import Badge from "@/components/ui/Badge"
-import Icon from "@/components/ui/Icon"
-import Loader from "@/components/ui/Loader"
-import Modal from "@/components/ui/Modal"
-import StatusMessage from "@/components/ui/StatusMessage"
+import { Alert } from "@/components/ui/Alert"
+import { Badge } from "@/components/ui/Badge"
+import { Icon } from "@/components/ui/Icon"
+import { Loader } from "@/components/ui/Loader"
+import { Modal } from "@/components/ui/Modal"
 import { CategoryWithSubcategories } from "@/features/category/category.types"
 import { UpdateProductFormInput } from "@/features/product/product.schema"
 import { api } from "@/lib/eden"
@@ -51,13 +51,13 @@ export default function AdminUpdateProductModal({ productToUpdate, categoriesWit
         <Modal className="container-xl" onClose={() => batch(() => { formStatus.value = null; productToUpdate.value = null })}>
             <div className="modal-header">
                 <Badge color="primary" size="md">
-                    <Icon name="pen" size="lg" />
+                    <Icon name="pen-line" size="lg" />
                 </Badge>
                 <h5>Ürün Güncelle</h5>
             </div>
 
             {isLoading && <Loader type="progress-bar" />}
-            {error && <StatusMessage color="danger">{error.message}</StatusMessage>}
+            {error && <Alert color="danger">{error.message}</Alert>}
 
             {data && <Form
                 groups={[

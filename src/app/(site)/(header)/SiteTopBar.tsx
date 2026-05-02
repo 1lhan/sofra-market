@@ -19,6 +19,7 @@ export default async function SiteTopBar() {
     ])
 
     const items = [coupon?.title, freeShippingCampaign?.title].filter(Boolean)
+
     if (!items.length) return null
 
     return (

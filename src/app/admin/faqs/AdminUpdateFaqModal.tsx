@@ -1,9 +1,9 @@
 "use client"
 
 import { Form } from "@/components/Form/Form"
-import Badge from "@/components/ui/Badge"
-import Icon from "@/components/ui/Icon"
-import Modal from "@/components/ui/Modal"
+import { Badge } from "@/components/ui/Badge"
+import { Icon } from "@/components/ui/Icon"
+import { Modal } from "@/components/ui/Modal"
 import { UpdateFaqFormInput } from "@/features/faq/faq.schema"
 import { FaqAdminList } from "@/features/faq/faq.types"
 import { api } from "@/lib/eden"
@@ -37,7 +37,7 @@ export default function AdminUpdateFaqModal({ faqToUpdate }: { faqToUpdate: Sign
         <Modal className="container-lg" onClose={() => batch(() => { formStatus.value = null; faqToUpdate.value = null })}>
             <div className="modal-header">
                 <Badge color="primary" size="md">
-                    <Icon name="pen" size="lg" />
+                    <Icon name="pen-line" size="lg" />
                 </Badge>
                 <h5>S.S.S Güncelle</h5>
             </div>

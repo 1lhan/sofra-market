@@ -16,66 +16,76 @@ enum Role {
 }
 
 model User {
-  id             String   @id  @default(cuid())
-  email          String   @unique
-  passwordHash   String   @map("password_hash")
-  firstName      String   @map("first_name")
-  lastName       String   @map("last_name")
-  phone          String?
-  isVerified     Boolean  @default(false)  @map("is_verified")
-  roles          Role[]   @default([CUSTOMER])
+  id               String    @id
+  email            String    @unique
+  emailVerified    Boolean   @default(false)
+  name             String
+  firstName        String
+  lastName         String
+  image            String?
+  phone            String?
+  roles            Role[]     @default([CUSTOMER])
 
-  addresses                Address[]
-  orders                   Order[]
-  reviews                  Review[]
-  favorites                Favorite[]
-  cart                     Cart?
-  refreshTokens            RefreshToken[]
-  emailVerificationTokens  EmailVerificationToken[]
-  passwordResetTokens      PasswordResetToken[]
+  sessions         Session[]
+  accounts         Account[]
+  addresses        Address[]
+  orders           Order[]
+  reviews          Review[]
+  favorites        Favorite[]
+  cart             Cart?
+  checkoutSession  CheckoutSession?
 
-  createdAt      DateTime  @default(now())  @map("created_at")
-  updatedAt      DateTime  @updatedAt       @map("updated_at")
+  createdAt        DateTime   @default(now())
+  updatedAt        DateTime   @updatedAt
 
-  @@map("users")
+  @@map("user")
 }
 
-model RefreshToken {
-  id         String    @id @default(cuid())
-  userId     String    @map("user_id")
-  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+model Session {
+  id         String    @id
+  expiresAt  DateTime
   token      String    @unique
-  expiresAt  DateTime  @map("expires_at")
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  ipAddress  String?
+  userAgent  String?
+  userId     String
+  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  createdAt  DateTime  @default(now())  @map("created_at")
-
-  @@map("refresh_tokens")
+  @@index([userId])
+  @@map("session")
 }
 
-model EmailVerificationToken {
-  id         String     @id  @default(cuid())
-  userId     String     @map("user_id")
-  user       User       @relation(fields: [userId], references: [id], onDelete: Cascade)
-  token      String     @unique
-  expiresAt  DateTime   @map("expires_at")
-  usedAt     DateTime?  @map("used_at")
+model Account {
+  id                     String     @id
+  accountId              String
+  providerId             String
+  userId                 String
+  user                   User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken            String?
+  refreshToken           String?
+  idToken                String?
+  accessTokenExpiresAt   DateTime?
+  refreshTokenExpiresAt  DateTime?
+  scope                  String?
+  password               String?
+  createdAt              DateTime   @default(now())
+  updatedAt              DateTime   @updatedAt
 
-  createdAt  DateTime   @default(now())  @map("created_at")
-
-  @@map("email_verification_tokens")
+  @@index([userId])
+  @@map("account")
 }
 
-model PasswordResetToken {
-  id         String     @id  @default(cuid())
-  userId     String     @map("user_id")
-  user       User       @relation(fields: [userId], references: [id], onDelete: Cascade)
-  token      String     @unique
-  expiresAt  DateTime   @map("expires_at")
-  usedAt     DateTime?  @map("used_at")
+model Verification {
+  id          String    @id
+  identifier  String
+  value       String
+  expiresAt   DateTime
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
 
-  createdAt  DateTime   @default(now())  @map("created_at")
-
-  @@map("password_reset_tokens")
+  @@index([identifier])
+  @@map("verification")
 }
 
 // CATALOG
@@ -206,6 +216,7 @@ model Coupon {
   usageCount         Int           @default(0)         @map("usage_count")
 
   orderDiscounts     OrderDiscount[]
+  carts              Cart[]
 
   createdAt          DateTime      @default(now())     @map("created_at")
   updatedAt          DateTime      @updatedAt          @map("updated_at")
@@ -219,7 +230,8 @@ model Cart {
   id         String   @id  @default(cuid())
   userId     String?  @unique  @map("user_id")
   user       User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
-  sessionId  String?  @unique  @map("session_id")
+  couponId   String?  @map("coupon_id")
+  coupon     Coupon?  @relation(fields: [couponId], references: [id], onDelete: SetNull)
 
   items      CartItem[]
 
@@ -242,6 +254,26 @@ model CartItem {
 
   @@unique([cartId, productId])
   @@map("cart_items")
+}
+
+enum CheckoutSessionStatus {
+  PENDING
+  COMPLETED
+  EXPIRED
+}
+
+model CheckoutSession {
+  id         String                    @id @default(cuid())
+  userId     String?                   @unique @map("user_id")
+  user       User?                     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  snapshot   Json
+  status     CheckoutSessionStatus     @default(PENDING)
+  expiresAt  DateTime                  @map("expires_at")
+
+  createdAt  DateTime @default(now())  @map("created_at")
+  updatedAt  DateTime @updatedAt       @map("updated_at")
+
+  @@map("checkout_sessions")
 }
 
 // ORDER
@@ -356,8 +388,7 @@ model Address {
   addressLine     String       @map("address_line")
   postalCode      String?      @map("postal_code")
   billingType     BillingType  @default(INDIVIDUAL)  @map("billing_type")
-  isDefault       Boolean      @default(false)  @map("is_default")
-  isDeleted       Boolean      @default(false)  @map("is_deleted")
+  isDefault       Boolean      @default(false)       @map("is_default")
 
   companyName     String?      @map("company_name")
   taxNumber       String?      @map("tax_number")
@@ -369,6 +400,7 @@ model Address {
 
   createdAt       DateTime     @default(now())  @map("created_at")
   updatedAt       DateTime     @updatedAt       @map("updated_at")
+  deletedAt       DateTime?    @map("deleted_at")
 
   @@map("addresses")
 }
@@ -414,7 +446,7 @@ model Blog {
   id               String    @id @default(cuid())
   title            String
   slug             String    @unique
-  excerpt          String?
+  excerpt          String
   content          String
   image            String?
   metaTitle        String?   @map("meta_title")

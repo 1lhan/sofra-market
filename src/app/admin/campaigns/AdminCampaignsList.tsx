@@ -2,9 +2,9 @@
 
 import Pagination from "@/components/Pagination"
 import { Table } from "@/components/Table"
-import Badge from "@/components/ui/Badge"
-import Loader from "@/components/ui/Loader"
-import StatusMessage from "@/components/ui/StatusMessage"
+import { Alert } from "@/components/ui/Alert"
+import { Badge } from "@/components/ui/Badge"
+import { Loader } from "@/components/ui/Loader"
 import { CAMPAIGN_TYPE_LABELS } from "@/features/campaign/campaign.helpers"
 import { formatDate } from "@/lib/date"
 import { api } from "@/lib/eden"
@@ -31,9 +31,9 @@ export default function AdminCampaignsList({ campaignToUpdate, campaignToDelete,
 
     if (isLoading) return <Loader type="progress-bar" />
 
-    if (!isLoading && error) return <StatusMessage color="danger">{error.message}</StatusMessage>
+    if (!isLoading && error) return <Alert color="danger">{error.message}</Alert>
 
-    if (!campaigns?.data.length) return <StatusMessage color="info">Henüz hiç kampanya oluşturulmadı</StatusMessage>
+    if (!campaigns?.data.length) return <Alert color="info">Henüz hiç kampanya oluşturulmadı</Alert>
 
     return (
         <>
@@ -46,7 +46,7 @@ export default function AdminCampaignsList({ campaignToUpdate, campaignToDelete,
                     { header: "Tarih Aralığı", render: (row) => <span>{formatDate(row.startsAt)} / {formatDate(row.endsAt)}</span> },
                     { header: "Kullanım", render: (row) => <span>{row.usageCount} / {row.usageLimit ?? "∞"}</span> },
                     { header: "Ürün Sayısı", render: (row) => <span>{row._count.products}</span> },
-                    { header: "Durum", render: (row) => <Badge color={row.isActive ? "success" : "danger"} size="sm" shape="default">{row.isActive ? "Aktif" : "Pasif"}</Badge> },
+                    { header: "Durum", render: (row) => <Badge color={row.isActive ? "success" : "danger"}>{row.isActive ? "Aktif" : "Pasif"}</Badge> },
                     {
                         header: "Action",
                         columns: [
