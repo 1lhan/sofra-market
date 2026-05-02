@@ -3,7 +3,7 @@ import { t } from "elysia"
 
 export const createProductSchema = t.Object({
     title: t.String({ minLength: 3, maxLength: 200 }),
-    slug: t.String({ minLength: 3, maxLength: 200 }),
+    slug: t.String({ minLength: 3, maxLength: 100 }),
     excerpt: t.String({ minLength: 3, maxLength: 750 }),
     description: t.String(),
     descriptionImages: t.Optional(t.Files({ type: ["image/webp", "image/jpeg"], maxSize: "500k", minItems: 0, maxItems: 10 })),
@@ -31,5 +31,17 @@ export const updateProductSchema = t.Composite([
     })
 ])
 
+export const getProductsSchema = t.Object({
+    category: t.Optional(t.String()),
+    subcategory: t.Optional(t.String()),
+    categorySlug: t.Optional(t.String()),
+    priceMin: t.Optional(t.String()),
+    priceMax: t.Optional(t.String()),
+    filter: t.Optional(t.String()),
+    sort: t.Optional(t.String()),
+    page: t.Optional(t.Numeric())
+})
+
 export type CreateProductFormInput = typeof createProductSchema.static
 export type UpdateProductFormInput = typeof updateProductSchema.static
+export type GetProductsQuery = typeof getProductsSchema.static

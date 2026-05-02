@@ -1,11 +1,15 @@
+import { auth } from "@/lib/auth";
+import { AppError } from "@/lib/server/errors";
 import Elysia from "elysia";
+import { headers } from "next/headers";
 import { createCategorySchema, updateCategorySchema } from "./category.schema";
-import { createCategory, deleteCategory, getAdminCategories, getCategoryOptions, updateCategory } from "./category.service";
+import { createCategory, deleteCategory, getAdminCategories, updateCategory } from "./category.service";
 
 export const adminCategoryRoutes = new Elysia({ prefix: "/admin/categories" })
-    // .onBeforeHandle(async () => {
-    //     await authorizeUser(["ADMIN"])
-    // })
+    .derive(async () => {
+        const session = await auth.api.getSession({ headers: await headers() })
+        if (!session?.user.roles.includes("ADMIN")) throw new AppError("UNAUTHORIZED", 401)
+    })
     .get(
         "/",
         async () => {
@@ -34,14 +38,5 @@ export const adminCategoryRoutes = new Elysia({ prefix: "/admin/categories" })
         async ({ params: { id } }) => {
             await deleteCategory(id)
             return { success: true }
-        }
-    )
-
-export const publicCategoryRoutes = new Elysia({ prefix: "/categories" })
-    .get(
-        "/options",
-        async () => {
-            const data = await getCategoryOptions()
-            return { success: true, data }
         }
     )

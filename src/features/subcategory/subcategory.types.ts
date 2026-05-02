@@ -16,6 +16,6 @@ export const subcategoryAdminListSelect = {
             products: true
         }
     }
-}
+} satisfies Prisma.SubcategorySelect
 
 export type SubcategoryAdminList = Prisma.SubcategoryGetPayload<{ select: typeof subcategoryAdminListSelect }>

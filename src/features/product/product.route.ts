@@ -1,11 +1,15 @@
+import { auth } from "@/lib/auth";
+import { AppError } from "@/lib/server/errors";
 import Elysia from "elysia";
-import { createProductSchema, updateProductSchema } from "./product.schema";
-import { createProduct, deleteProduct, getAdminProducts, getProductForUpdate, getProductOptions, getPublicProductDetail, getPublicProducts, updateProduct } from "./product.service";
+import { headers } from "next/headers";
+import { createProductSchema, getProductsSchema, updateProductSchema } from "./product.schema";
+import { createProduct, deleteProduct, getAdminProducts, getProductForUpdate, getPublicProducts, updateProduct } from "./product.service";
 
 export const adminProductRoutes = new Elysia({ prefix: "/admin/products" })
-    // .onBeforeHandle(async () => {
-    //     await authorizeUser(["ADMIN"])
-    // })
+    .derive(async () => {
+        const session = await auth.api.getSession({ headers: await headers() })
+        if (!session?.user.roles.includes("ADMIN")) throw new AppError("UNAUTHORIZED", 401)
+    })
     .get(
         "/",
         async ({ query }) => {
@@ -50,19 +54,6 @@ export const publicProductRoutes = new Elysia({ prefix: "/products" })
         async ({ query }) => {
             const data = await getPublicProducts(query, 20)
             return { success: true, data }
-        }
-    )
-    .get(
-        "/:slug",
-        async ({ params: { slug } }) => {
-            const data = await getPublicProductDetail(slug)
-            return { success: true, data }
-        }
-    )
-    .get(
-        "/options",
-        async () => {
-            const data = await getProductOptions()
-            return { success: true, data }
-        }
+        },
+        { query: getProductsSchema }
     )

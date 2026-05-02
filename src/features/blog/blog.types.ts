@@ -1,4 +1,5 @@
 import { Prisma } from "@/generated/prisma/client"
+import { productPublicSelect } from "../product/product.types"
 
 export const blogAdminListSelect = {
     id: true,
@@ -6,6 +7,7 @@ export const blogAdminListSelect = {
     slug: true,
     excerpt: true,
     image: true,
+    createdAt: true
 } satisfies Prisma.BlogSelect
 
 export const blogAdminUpdateSelect = {
@@ -21,12 +23,27 @@ export const blogAdminUpdateSelect = {
             id: true
         }
     }
-}
+} satisfies Prisma.BlogSelect
 
 export const blogPublicSelect = {
+    title: true,
+    slug: true,
+    excerpt: true,
+    image: true,
+    createdAt: true
 } satisfies Prisma.BlogSelect
 
 export const blogPublicDetailSelect = {
+    title: true,
+    slug: true,
+    excerpt: true,
+    content: true,
+    image: true,
+    metaTitle: true,
+    metaDescription: true,
+    products: {
+        select: productPublicSelect
+    }
 } satisfies Prisma.BlogSelect
 
 export type BlogAdminList = Prisma.BlogGetPayload<{ select: typeof blogAdminListSelect }>

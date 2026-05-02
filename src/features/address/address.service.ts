@@ -4,10 +4,8 @@ import { CreateAddressFormInput, UpdateAddressFormInput } from "./address.schema
 import { UserAddress, userAddressSelect } from "./address.types"
 
 export async function createAddress(data: CreateAddressFormInput, userId: string) {
-    if (data.billingType === "CORPORATE") {
-        if (!data.companyName || !data.taxNumber || !data.taxOffice) {
-            throw new AppError("Kurumsal adres için şirket adı, vergi numarası ve vergi dairesi zorunludur", 400)
-        }
+    if (data.billingType === "CORPORATE" && (!data.companyName || !data.taxNumber || !data.taxOffice)) {
+        throw new AppError("Kurumsal adres için şirket adı, vergi numarası ve vergi dairesi zorunludur", 400)
     }
 
     const existingAddressCount = await prisma.address.count({
@@ -24,10 +22,8 @@ export async function createAddress(data: CreateAddressFormInput, userId: string
 }
 
 export async function updateAddress(id: string, data: UpdateAddressFormInput, userId: string) {
-    if (data.billingType === "CORPORATE") {
-        if (!data.companyName || !data.taxNumber || !data.taxOffice) {
-            throw new AppError("Kurumsal adres için şirket adı, vergi numarası ve vergi dairesi zorunludur", 400)
-        }
+    if (data.billingType === "CORPORATE" && (!data.companyName || !data.taxNumber || !data.taxOffice)) {
+        throw new AppError("Kurumsal adres için şirket adı, vergi numarası ve vergi dairesi zorunludur", 400)
     }
 
     const address = await prisma.address.findUnique({

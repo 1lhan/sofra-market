@@ -1,17 +1,22 @@
-import Elysia from "elysia";
+import { auth } from "@/lib/auth";
+import { AppError } from "@/lib/server/errors";
+import Elysia, { t } from "elysia";
+import { headers } from "next/headers";
 import { createCampaignSchema, updateCampaignSchema } from "./campaign.schema";
-import { createCampaign, deleteCampaign, getAdminCampaigns, getCampaignForUpdate, getPublicCampaignDetail, getPublicCampaigns, updateCampaign } from "./campaign.service";
+import { createCampaign, deleteCampaign, getAdminCampaigns, getCampaignForUpdate, updateCampaign } from "./campaign.service";
 
 export const adminCampaignRoutes = new Elysia({ prefix: "/admin/campaigns" })
-    // .onBeforeHandle(async () => {
-    //     await authorizeUser(["ADMIN"])
-    // })
+    .derive(async () => {
+        const session = await auth.api.getSession({ headers: await headers() })
+        if (!session?.user.roles.includes("ADMIN")) throw new AppError("UNAUTHORIZED", 401)
+    })
     .get(
         "/",
         async ({ query }) => {
             const data = await getAdminCampaigns(query.page, 10)
             return { success: true, data }
-        }
+        },
+        { query: t.Object({ page: t.Optional(t.Numeric()) }) }
     )
     .post(
         "/",
@@ -41,21 +46,5 @@ export const adminCampaignRoutes = new Elysia({ prefix: "/admin/campaigns" })
         async ({ params: { id } }) => {
             await deleteCampaign(id)
             return { success: true }
-        }
-    )
-
-export const publicCampaignRoutes = new Elysia({ prefix: "/campaigns" })
-    .get(
-        "/",
-        async () => {
-            const data = await getPublicCampaigns()
-            return { success: true, data }
-        }
-    )
-    .get(
-        "/:id",
-        async ({ params: { id } }) => {
-            const data = await getPublicCampaignDetail(id)
-            return { success: true, data }
         }
     )

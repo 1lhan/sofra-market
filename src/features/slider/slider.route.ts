@@ -1,11 +1,15 @@
+import { auth } from "@/lib/auth";
+import { AppError } from "@/lib/server/errors";
 import Elysia from "elysia";
+import { headers } from "next/headers";
 import { createSliderSchema, updateSliderSchema } from "./slider.schema";
-import { createSlider, deleteSlider, getAdminSliders, getPublicSliders, updateSlider } from "./slider.service";
+import { createSlider, deleteSlider, getAdminSliders, updateSlider } from "./slider.service";
 
 export const adminSliderRoutes = new Elysia({ prefix: "/admin/sliders" })
-    // .onBeforeHandle(async () => {
-    //     await authorizeUser(["ADMIN"])
-    // })
+    .derive(async () => {
+        const session = await auth.api.getSession({ headers: await headers() })
+        if (!session?.user.roles.includes("ADMIN")) throw new AppError("UNAUTHORIZED", 401)
+    })
     .get(
         "/",
         async () => {
@@ -34,14 +38,5 @@ export const adminSliderRoutes = new Elysia({ prefix: "/admin/sliders" })
         async ({ params: { id } }) => {
             await deleteSlider(id)
             return { success: true }
-        }
-    )
-
-export const publicSliderRoutes = new Elysia({ prefix: "/sliders" })
-    .get(
-        "/",
-        async () => {
-            const data = await getPublicSliders()
-            return { success: true, data }
         }
     )

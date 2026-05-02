@@ -5,7 +5,7 @@ import { AppError } from "@/lib/server/errors"
 import { deleteFiles, saveFiles } from "@/lib/server/storage"
 import { SelectOption } from "@/lib/types"
 import { revalidateTag } from "next/cache"
-import { CreateProductFormInput, UpdateProductFormInput } from "./product.schema"
+import { CreateProductFormInput, GetProductsQuery, UpdateProductFormInput } from "./product.schema"
 import { ProductAdminList, productAdminListSelect, ProductAdminUpdate, productAdminUpdateSelect, ProductPublic, ProductPublicDetail, productPublicDetailSelect, productPublicSelect } from "./product.types"
 
 export async function createProduct(data: CreateProductFormInput) {
@@ -54,6 +54,10 @@ export async function updateProduct(id: string, data: UpdateProductFormInput) {
         where: { id },
         select: { slug: true, description: true, images: true }
     })
+
+    if ((images?.length ?? 0) + (initialImages?.length ?? 0) > 4) {
+        throw new AppError("En fazla 4 görsel yüklenebilir", 400)
+    }
 
     if (!product) throw new AppError("Ürün bulunamadı", 404)
 
@@ -143,30 +147,39 @@ export async function getProductForUpdate(id: string): Promise<ProductAdminUpdat
     })
 }
 
-const sortToOrderBy: Record<string, Record<string, string>> = {
+const sortToOrderBy: Record<string, any> = {
     featured: { createdAt: "desc" },
-    best_selling: { createdAt: "desc" },
+    best_selling: { orderItems: { _count: "desc" } },
     price_asc: { price: "asc" },
     price_desc: { price: "desc" },
     name_asc: { title: "asc" },
     name_desc: { title: "desc" }
 }
 
-export async function getPublicProducts(searchParams: Record<string, string>, limit: number): Promise<{ total: number, data: ProductPublic[] }> {
-    const { categorySlug, price_min, price_max, sort, page } = searchParams
+export async function getPublicProducts(searchParams: GetProductsQuery, limit: number): Promise<{ total: number, data: ProductPublic[] }> {
+    const { category, subcategory, categorySlug, priceMin, priceMax, filter, sort, page } = searchParams
 
-    const pageNumber = Math.max(1, Number(page) || 1)
+    const pageNumber = Math.max(1, page ?? 1)
     const offset = (pageNumber - 1) * limit
+    const filters = filter?.split(",") ?? []
 
     const where = {
+        ...(category ? { category: { slug: { in: category.split(",") } } } : {}),
+        ...(subcategory ? { subcategory: { slug: { in: subcategory.split(",") } } } : {}),
         ...(categorySlug ? {
             OR: [
                 { category: { slug: categorySlug } },
                 { subcategory: { slug: categorySlug } }
             ]
         } : {}),
-        ...(price_min ? { price: { gte: +price_min } } : {}),
-        ...(price_max ? { price: { lte: +price_max } } : {}),
+        ...(priceMin || priceMax ? {
+            price: {
+                ...(priceMin ? { gte: +priceMin } : {}),
+                ...(priceMax ? { lte: +priceMax } : {})
+            }
+        } : {}),
+        ...(filters.includes("discounted") ? { comparePrice: { not: null } } : {}),
+        ...(filters.includes("campaign") ? { campaigns: { some: {} } } : {}),
         isActive: true
     } satisfies Prisma.ProductWhereInput
 

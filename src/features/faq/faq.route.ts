@@ -1,11 +1,15 @@
+import { auth } from "@/lib/auth";
+import { AppError } from "@/lib/server/errors";
 import Elysia from "elysia";
+import { headers } from "next/headers";
 import { createFaqSchema, updateFaqSchema } from "./faq.schema";
-import { createFaq, deleteFaq, getAdminFaqs, getPublicFaqs, updateFaq } from "./faq.service";
+import { createFaq, deleteFaq, getAdminFaqs, updateFaq } from "./faq.service";
 
 export const adminFaqRoutes = new Elysia({ prefix: "/admin/faqs" })
-    // .onBeforeHandle(async () => {
-    //     await authorizeUser(["ADMIN"])
-    // })
+    .derive(async () => {
+        const session = await auth.api.getSession({ headers: await headers() })
+        if (!session?.user.roles.includes("ADMIN")) throw new AppError("UNAUTHORIZED", 401)
+    })
     .get(
         "/",
         async () => {
@@ -34,14 +38,5 @@ export const adminFaqRoutes = new Elysia({ prefix: "/admin/faqs" })
         async ({ params: { id } }) => {
             await deleteFaq(id)
             return { success: true }
-        }
-    )
-
-export const publicFaqRoutes = new Elysia({ prefix: "/faqs" })
-    .get(
-        "/",
-        async () => {
-            const data = await getPublicFaqs()
-            return { success: true, data }
         }
     )

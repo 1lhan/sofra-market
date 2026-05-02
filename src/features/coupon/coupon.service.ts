@@ -3,10 +3,14 @@ import { AppError } from "@/lib/server/errors"
 import { deleteFiles, saveFiles } from "@/lib/server/storage"
 import { revalidateTag } from "next/cache"
 import { CreateCouponFormInput, UpdateCouponFormInput } from "./coupon.schema"
-import { CouponAdminList, couponAdminListSelect, CouponAdminUpdate, couponAdminUpdateSelect, CouponPublic, CouponPublicDetail, couponPublicDetailSelect, couponPublicSelect } from "./coupon.types"
+import { CouponAdminList, couponAdminListSelect, CouponAdminUpdate, couponAdminUpdateSelect, CouponPublic, couponPublicSelect } from "./coupon.types"
 
 export async function createCoupon(data: CreateCouponFormInput) {
     const { image, ...rest } = data
+
+    if (data.endsAt && new Date(data.endsAt) < new Date()) {
+        throw new AppError("Bitiş tarihi geçmiş bir tarih olamaz", 400)
+    }
 
     const codeExists = await prisma.coupon.findFirst({
         where: { code: data.code, isActive: true },
@@ -95,8 +99,8 @@ export async function deleteCoupon(id: string) {
     revalidateTag("coupons", "max")
 }
 
-export async function getAdminCoupons(page: string | undefined, limit: number): Promise<{ total: number, data: CouponAdminList[] }> {
-    const pageNumber = Math.max(1, Number(page) || 1)
+export async function getAdminCoupons(page: number | undefined, limit: number): Promise<{ total: number, data: CouponAdminList[] }> {
+    const pageNumber = Math.max(1, page ?? 1)
     const offset = (pageNumber - 1) * limit
 
     const [total, data] = await Promise.all([
@@ -123,16 +127,16 @@ export async function getCouponForUpdate(id: string): Promise<CouponAdminUpdate 
 }
 
 export async function getPublicCoupons(): Promise<CouponPublic[]> {
+    const now = new Date()
     return prisma.coupon.findMany({
-        where: { isActive: true },
+        where: {
+            isActive: true,
+            AND: [
+                { OR: [{ startsAt: null }, { startsAt: { lte: now } }] },
+                { OR: [{ endsAt: null }, { endsAt: { gte: now } }] }
+            ]
+        },
         select: couponPublicSelect,
         orderBy: { createdAt: "desc" }
-    })
-}
-
-export async function getPublicCouponDetail(id: string): Promise<CouponPublicDetail | null> {
-    return prisma.coupon.findUnique({
-        where: { id, isActive: true },
-        select: couponPublicDetailSelect
     })
 }

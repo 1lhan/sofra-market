@@ -38,6 +38,7 @@ export const productAdminUpdateSelect = {
 } satisfies Prisma.ProductSelect
 
 export const productPublicSelect = {
+    id: true,
     title: true,
     slug: true,
     price: true,
@@ -46,12 +47,15 @@ export const productPublicSelect = {
     averageRating: true,
     _count: {
         select: {
-            reviews: true
+            reviews: {
+                where: { status: "APPROVED" }
+            }
         }
     }
 } satisfies Prisma.ProductSelect
 
 export const productPublicDetailSelect = {
+    id: true,
     title: true,
     slug: true,
     excerpt: true,

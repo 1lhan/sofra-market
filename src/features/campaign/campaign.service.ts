@@ -2,9 +2,9 @@ import { CampaignType } from "@/generated/prisma/enums"
 import { prisma } from "@/lib/prisma"
 import { AppError } from "@/lib/server/errors"
 import { deleteFiles, saveFiles } from "@/lib/server/storage"
-import { revalidateTag } from "next/cache"
+import { cacheLife, cacheTag, revalidateTag } from "next/cache"
 import { CreateCampaignFormInput, UpdateCampaignFormInput } from "./campaign.schema"
-import { CampaignAdminList, campaignAdminListSelect, CampaignAdminUpdate, campaignAdminUpdateSelect, CampaignPublic, CampaignPublicDetail, campaignPublicDetailSelect, campaignPublicSelect } from "./campaign.types"
+import { CampaignAdminList, campaignAdminListSelect, CampaignAdminUpdate, campaignAdminUpdateSelect, CampaignPublic, campaignPublicSelect } from "./campaign.types"
 
 function validateCampaignFields(data: CreateCampaignFormInput | UpdateCampaignFormInput) {
     const { type, discountType, discountValue, buyQuantity, payQuantity, everyNth, minOrderAmount } = data
@@ -32,6 +32,10 @@ export async function createCampaign(data: CreateCampaignFormInput) {
     const { image, products = [], ...rest } = data
 
     validateCampaignFields(data)
+
+    if (data.endsAt && new Date(data.endsAt) < new Date()) {
+        throw new AppError("Bitiş tarihi geçmiş bir tarih olamaz", 400)
+    }
 
     if (data.type === CampaignType.FREE_SHIPPING && data.isActive) {
         const activeFreeShippingCampaign = await prisma.campaign.findFirst({
@@ -65,6 +69,10 @@ export async function updateCampaign(id: string, data: UpdateCampaignFormInput) 
 
     validateCampaignFields(data)
 
+    if (data.endsAt && new Date(data.endsAt) < new Date()) {
+        throw new AppError("Bitiş tarihi geçmiş bir tarih olamaz", 400)
+    }
+
     const campaign = await prisma.campaign.findUnique({
         where: { id },
         select: {
@@ -75,10 +83,15 @@ export async function updateCampaign(id: string, data: UpdateCampaignFormInput) 
             orderDiscounts: {
                 take: 1,
                 select: { id: true }
-            }
+            },
+            usageCount: true
         }
     })
     if (!campaign) throw new AppError("Kampanya bulunamadı", 404)
+
+    if (data.usageLimit !== null && data.usageLimit !== undefined && data.usageLimit < campaign.usageCount) {
+        throw new AppError(`Kullanım limiti, mevcut kullanım sayısından (${campaign.usageCount}) az olamaz`, 400)
+    }
 
     const hasOrders = campaign.orderDiscounts.length > 0
 
@@ -130,7 +143,7 @@ export async function updateCampaign(id: string, data: UpdateCampaignFormInput) 
                     : rest
                 ),
                 image: newImageUrl ?? (initialImage?.length ? campaign.image : null),
-                products: { set: products.map(id => ({ id })) },
+                products: { set: products.map(id => ({ id })) }
             }
         })
     }
@@ -161,8 +174,8 @@ export async function deleteCampaign(id: string) {
     revalidateTag("campaigns", "max")
 }
 
-export async function getAdminCampaigns(page: string | undefined, limit: number): Promise<{ total: number, data: CampaignAdminList[] }> {
-    const pageNumber = Math.max(1, Number(page) || 1)
+export async function getAdminCampaigns(page: number | undefined, limit: number): Promise<{ total: number, data: CampaignAdminList[] }> {
+    const pageNumber = Math.max(1, page ?? 1)
     const offset = (pageNumber - 1) * limit
 
     const [total, data] = await Promise.all([
@@ -189,16 +202,48 @@ export async function getCampaignForUpdate(id: string): Promise<CampaignAdminUpd
 }
 
 export async function getPublicCampaigns(): Promise<CampaignPublic[]> {
+    const now = new Date()
     return prisma.campaign.findMany({
-        where: { isActive: true },
+        where: {
+            isActive: true,
+            AND: [
+                { OR: [{ startsAt: null }, { startsAt: { lte: now } }] },
+                { OR: [{ endsAt: null }, { endsAt: { gte: now } }] }
+            ]
+        },
         select: campaignPublicSelect,
         orderBy: { createdAt: "desc" }
     })
 }
 
-export async function getPublicCampaignDetail(id: string): Promise<CampaignPublicDetail | null> {
-    return prisma.campaign.findUnique({
-        where: { id, isActive: true },
-        select: campaignPublicDetailSelect
+export async function getCampaignsForCartCalculation() {
+    "use cache"
+    cacheLife("max")
+    cacheTag("campaigns")
+    cacheTag("products")
+
+    return prisma.campaign.findMany({
+        where: { isActive: true },
+        select: {
+            title: true,
+            type: true,
+            startsAt: true,
+            endsAt: true,
+            discountType: true,
+            discountValue: true,
+            maxDiscountAmount: true,
+            minOrderAmount: true,
+            buyQuantity: true,
+            payQuantity: true,
+            everyNth: true,
+            usageLimit: true,
+            usageCount: true,
+            perUserLimit: true,
+            products: {
+                select: {
+                    id: true
+                }
+            }
+        }
     })
 }

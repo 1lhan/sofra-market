@@ -36,8 +36,12 @@ export async function updateSlider(id: string, data: UpdateSliderFormInput) {
     if (!image && !initialImage?.length) throw new AppError("Slider için görsel zorunludur", 400)
 
     const [savedImageUrl, mobileImageUrl] = await Promise.all([
-        image ? saveFiles([image]).then(r => r[0]) : Promise.resolve(null),
-        mobileImage ? saveFiles([mobileImage]).then(r => r[0]) : Promise.resolve(initialMobileImage?.length ? slider.mobileImage : null)
+        image
+            ? saveFiles([image]).then(r => r[0])
+            : Promise.resolve(null),
+        mobileImage
+            ? saveFiles([mobileImage]).then(r => r[0])
+            : Promise.resolve(initialMobileImage?.length ? slider.mobileImage : null)
     ])
 
     try {
@@ -87,8 +91,7 @@ export async function getAdminSliders(): Promise<SliderAdminList[]> {
         select: sliderAdminListSelect,
         orderBy: [
             { isActive: "desc" },
-            { sortOrder: "asc" },
-            { createdAt: "desc" }
+            { sortOrder: "asc" }
         ]
     })
 }

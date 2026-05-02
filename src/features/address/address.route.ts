@@ -5,7 +5,7 @@ import { headers } from "next/headers";
 import { createAddressSchema, updateAddressSchema } from "./address.schema";
 import { createAddress, deleteAddress, getUserAddresses, setDefaultAddress, updateAddress } from "./address.service";
 
-export const authenticatedAddressRoutes = new Elysia({ prefix: "/addresses" })
+export const protectedAddressRoutes = new Elysia({ prefix: "/addresses" })
     .derive(async () => {
         const session = await auth.api.getSession({ headers: await headers() })
         if (!session) throw new AppError("UNAUTHORIZED", 401)
@@ -28,23 +28,23 @@ export const authenticatedAddressRoutes = new Elysia({ prefix: "/addresses" })
     )
     .put(
         "/:addressId",
-        async ({ params: { addressId }, body, userId }) => {
-            const data = await updateAddress(addressId, body, userId)
+        async ({ params, body, userId }) => {
+            const data = await updateAddress(params.addressId, body, userId)
             return { success: true, data }
         },
         { body: updateAddressSchema }
     )
     .delete(
         "/:addressId",
-        async ({ params: { addressId }, userId }) => {
-            await deleteAddress(addressId, userId)
+        async ({ params, userId }) => {
+            await deleteAddress(params.addressId, userId)
             return { success: true }
         }
     )
     .patch(
         "/:addressId/default",
-        async ({ params: { addressId }, userId }) => {
-            await setDefaultAddress(addressId, userId)
+        async ({ params, userId }) => {
+            await setDefaultAddress(params.addressId, userId)
             return { success: true }
         }
     )

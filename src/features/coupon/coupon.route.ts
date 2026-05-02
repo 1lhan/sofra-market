@@ -1,17 +1,22 @@
-import Elysia from "elysia";
+import { auth } from "@/lib/auth";
+import { AppError } from "@/lib/server/errors";
+import Elysia, { t } from "elysia";
+import { headers } from "next/headers";
 import { createCouponSchema, updateCouponSchema } from "./coupon.schema";
-import { createCoupon, deleteCoupon, getAdminCoupons, getCouponForUpdate, getPublicCouponDetail, getPublicCoupons, updateCoupon } from "./coupon.service";
+import { createCoupon, deleteCoupon, getAdminCoupons, getCouponForUpdate, updateCoupon } from "./coupon.service";
 
 export const adminCouponRoutes = new Elysia({ prefix: "/admin/coupons" })
-    // .onBeforeHandle(async () => {
-    //     await authorizeUser(["ADMIN"])
-    // })
+    .derive(async () => {
+        const session = await auth.api.getSession({ headers: await headers() })
+        if (!session?.user.roles.includes("ADMIN")) throw new AppError("UNAUTHORIZED", 401)
+    })
     .get(
         "/",
         async ({ query }) => {
             const data = await getAdminCoupons(query.page, 10)
             return { success: true, data }
-        }
+        },
+        { query: t.Object({ page: t.Optional(t.Numeric()) }) }
     )
     .post(
         "/",
@@ -41,21 +46,5 @@ export const adminCouponRoutes = new Elysia({ prefix: "/admin/coupons" })
         async ({ params: { id } }) => {
             await deleteCoupon(id)
             return { success: true }
-        }
-    )
-
-export const publicCouponRoutes = new Elysia({ prefix: "/coupons" })
-    .get(
-        "/",
-        async () => {
-            const data = await getPublicCoupons()
-            return { success: true, data }
-        }
-    )
-    .get(
-        "/:id",
-        async ({ params: { id } }) => {
-            const data = await getPublicCouponDetail(id)
-            return { success: true, data }
         }
     )

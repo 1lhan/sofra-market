@@ -1,4 +1,5 @@
 import { Prisma } from "@/generated/prisma/client"
+import { getCampaignsForCartCalculation } from "./campaign.service"
 
 export const campaignAdminListSelect = {
     id: true,
@@ -53,10 +54,8 @@ export const campaignPublicSelect = {
     image: true
 } satisfies Prisma.CampaignSelect
 
-export const campaignPublicDetailSelect = {
-} satisfies Prisma.CampaignSelect
-
 export type CampaignAdminList = Prisma.CampaignGetPayload<{ select: typeof campaignAdminListSelect }>
 export type CampaignAdminUpdate = Prisma.CampaignGetPayload<{ select: typeof campaignAdminUpdateSelect }>
 export type CampaignPublic = Prisma.CampaignGetPayload<{ select: typeof campaignPublicSelect }>
-export type CampaignPublicDetail = Prisma.CampaignGetPayload<{ select: typeof campaignPublicDetailSelect }>
+
+export type CampaignForCartCalculation = Awaited<ReturnType<typeof getCampaignsForCartCalculation>>[number]

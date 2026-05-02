@@ -7,7 +7,7 @@ import { BlogAdminList, blogAdminListSelect, BlogAdminUpdate, blogAdminUpdateSel
 
 export async function createBlog(data: CreateBlogFormInput) {
     const { content, contentImages, image, products, ...rest } = data
-    
+
     const [imageUrl, { processedContent, contentImageUrls }] = await Promise.all([
         image ? saveFiles([image]).then(urls => urls[0]) : Promise.resolve(null),
         prepareEditorContentForCreate(content, contentImages)
@@ -40,7 +40,6 @@ export async function updateBlog(id: string, data: UpdateBlogFormInput) {
         where: { id },
         select: { content: true, image: true }
     })
-
     if (!blog) throw new AppError("Blog bulunamadı", 404)
 
     const [newImageUrl, { processedContent, contentImageUrls, contentImageUrlsToDelete }] = await Promise.all([
@@ -92,8 +91,8 @@ export async function deleteBlog(id: string) {
     }
 }
 
-export async function getAdminBlogs(page: string | undefined, limit: number): Promise<{ total: number, data: BlogAdminList[] }> {
-    const pageNumber = Math.max(1, Number(page) || 1)
+export async function getAdminBlogs(page: number | undefined, limit: number): Promise<{ total: number, data: BlogAdminList[] }> {
+    const pageNumber = Math.max(1, page ?? 1)
     const offset = (pageNumber - 1) * limit
 
     const [total, data] = await Promise.all([
@@ -116,16 +115,26 @@ export async function getBlogForUpdate(id: string): Promise<BlogAdminUpdate | nu
     })
 }
 
-export async function getPublicBlogs(): Promise<BlogPublic[]> {
-    return prisma.blog.findMany({
-        select: blogPublicSelect,
-        orderBy: { createdAt: "desc" }
-    })
+export async function getPublicBlogs(page: number | undefined, limit: number): Promise<{ total: number, data: BlogPublic[] }> {
+    const pageNumber = Math.max(1, page ?? 1)
+    const offset = (pageNumber - 1) * limit
+
+    const [total, data] = await Promise.all([
+        prisma.blog.count(),
+        prisma.blog.findMany({
+            select: blogPublicSelect,
+            skip: offset,
+            take: limit,
+            orderBy: { createdAt: "desc" }
+        })
+    ])
+
+    return { total, data }
 }
 
-export async function getPublicBlogDetail(id: string): Promise<BlogPublicDetail | null> {
+export async function getPublicBlogDetail(slug: string): Promise<BlogPublicDetail | null> {
     return prisma.blog.findUnique({
-        where: { id },
+        where: { slug },
         select: blogPublicDetailSelect
     })
 }

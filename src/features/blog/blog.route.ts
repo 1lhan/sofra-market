@@ -1,17 +1,22 @@
-import Elysia from "elysia";
+import { auth } from "@/lib/auth";
+import { AppError } from "@/lib/server/errors";
+import Elysia, { t } from "elysia";
+import { headers } from "next/headers";
 import { createBlogSchema, updateBlogSchema } from "./blog.schema";
-import { createBlog, deleteBlog, getAdminBlogs, getBlogForUpdate, getPublicBlogDetail, getPublicBlogs, updateBlog } from "./blog.service";
+import { createBlog, deleteBlog, getAdminBlogs, getBlogForUpdate, getPublicBlogs, updateBlog } from "./blog.service";
 
 export const adminBlogRoutes = new Elysia({ prefix: "/admin/blogs" })
-    // .onBeforeHandle(async () => {
-    //     await authorizeUser(["ADMIN"])
-    // })
+    .derive(async () => {
+        const session = await auth.api.getSession({ headers: await headers() })
+        if (!session?.user.roles.includes("ADMIN")) throw new AppError("UNAUTHORIZED", 401)
+    })
     .get(
         "/",
         async ({ query }) => {
             const data = await getAdminBlogs(query.page, 10)
             return { success: true, data }
-        }
+        },
+        { query: t.Object({ page: t.Optional(t.Numeric()) }) }
     )
     .post(
         "/",
@@ -47,15 +52,9 @@ export const adminBlogRoutes = new Elysia({ prefix: "/admin/blogs" })
 export const publicBlogRoutes = new Elysia({ prefix: "/blogs" })
     .get(
         "/",
-        async () => {
-            const data = await getPublicBlogs()
+        async ({ query }) => {
+            const data = await getPublicBlogs(query.page, 10)
             return { success: true, data }
-        }
-    )
-    .get(
-        "/:id",
-        async ({ params: { id } }) => {
-            const data = await getPublicBlogDetail(id)
-            return { success: true, data }
-        }
+        },
+        { query: t.Object({ page: t.Optional(t.Numeric()) }) }
     )

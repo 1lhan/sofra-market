@@ -1,9 +1,9 @@
 import { t } from "elysia"
 
 const baseSliderSchema = t.Object({
-    mobileImage: t.Transform(t.Files({ type: ["image/webp", "image/jpeg"], maxSize: "2000k", minItems: 0, maxItems: 1 }))
+    mobileImage: t.Optional(t.Transform(t.Files({ type: ["image/webp", "image/jpeg"], maxSize: "2000k", minItems: 0, maxItems: 1 }))
         .Decode(v => v.length === 0 ? null : v[0])
-        .Encode(v => v === null ? [] : [v]),
+        .Encode(v => v === null ? [] : [v])),
     imageAlt: t.Transform(t.String({ maxLength: 125 }))
         .Decode(v => v === "" ? null : v)
         .Encode(v => v ?? ""),
@@ -24,11 +24,29 @@ export const createSliderSchema = t.Composite([
 export const updateSliderSchema = t.Composite([
     baseSliderSchema,
     t.Object({
-        image: t.Transform(t.Files({ type: ["image/webp", "image/jpeg"], maxSize: "2000k", minItems: 0, maxItems: 1 }))
+        image: t.Optional(t.Transform(t.Files({ type: ["image/webp", "image/jpeg"], maxSize: "2000k", minItems: 0, maxItems: 1 }))
             .Decode(v => v.length === 0 ? null : v[0])
-            .Encode(v => v === null ? [] : [v]),
-        initialImage: t.Optional(t.Array(t.String(), { maxItems: 1 })),
-        initialMobileImage: t.Optional(t.Array(t.String(), { maxItems: 1 }))
+            .Encode(v => v === null ? [] : [v])),
+        initialImage: t.Optional(
+            t.Transform(
+                t.Union([
+                    t.String(),
+                    t.Array(t.String())
+                ])
+            )
+                .Decode(v => Array.isArray(v) ? v : [v])
+                .Encode(v => v)
+        ),
+        initialMobileImage: t.Optional(
+            t.Transform(
+                t.Union([
+                    t.String(),
+                    t.Array(t.String())
+                ])
+            )
+                .Decode(v => Array.isArray(v) ? v : [v])
+                .Encode(v => v)
+        )
     })
 ])
 
